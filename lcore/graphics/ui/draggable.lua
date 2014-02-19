@@ -1,8 +1,8 @@
 --[[
 #id graphics.ui.draggable
 #title Draggable Superclass
-#status needs-testing
-#version 1.0
+#status production
+#version 1.1
 
 #desc Enables draggable functionality.
 ]]
@@ -18,6 +18,7 @@ rectdraggable = oop:class()({
 	smx = 0,
 	smy = 0,
 
+	draggable = true,
 	dragging = false,
 	buttons = {["l"] = true},
 
@@ -34,17 +35,15 @@ rectdraggable = oop:class()({
 	end,
 
 	mousepressed = function(self, x, y, button)
-		if (self.buttons[button]) then
-			if (self:contains(x, y)) then
-				self.dragging = true
+		if (self.draggable and self.buttons[button] and self:contains(x, y)) then
+			self.dragging = true
 
-				self.sx = self.x
-				self.sy = self.y
-				self.smx = x
-				self.smy = y
+			self.sx = self.x
+			self.sy = self.y
+			self.smx = x
+			self.smy = y
 
-				self:drag_start()
-			end
+			self:drag_start()
 		end
 	end,
 

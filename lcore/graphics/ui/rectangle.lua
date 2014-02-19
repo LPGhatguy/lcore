@@ -1,6 +1,6 @@
 --[[
 #id graphics.ui.rectangle
-#title UI Rectangle
+#title UI rectangle
 #status production
 #version 1.0
 
@@ -9,17 +9,17 @@
 
 local L = (...)
 local oop = L:get("utility.oop")
-local box = L:get("graphics.ui.box")
+local rectangle_shape = L:get("graphics.ui.rectangle_shape")
 local color = L:get("graphics.color")
 local rectangle
 
-rectangle = oop:class(box)({
+rectangle = oop:class(rectangle_shape)({
 	background_color = color:get("darkgray"),
 	border_color = color:get("silver"),
 	border_width = 2,
 
 	draw = function(self)
-		box.draw(self)
+		rectangle_shape.draw(self)
 
 		local bw = self.border_width
 		local hw = bw / 2

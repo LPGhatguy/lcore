@@ -9,12 +9,10 @@
 
 local L = (...)
 local oop = L:get("utility.oop")
-local box = L:get("graphics.ui.box")
 local gcore = L:get("graphics.core")
 local container
 
-container = oop:class(box)({
-	clips_children = false,
+container = oop:class(rectangle)({
 	children = {},
 
 	add = function(self, item)
