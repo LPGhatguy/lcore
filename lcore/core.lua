@@ -1,7 +1,7 @@
 --[[
 #id lcore
 #title LCORE
-#version 1.1.1
+#version 1.2.0
 #status production
 
 #desc Provides the basis for everything in the framework.
@@ -47,7 +47,7 @@ lcore = {
 	--ERRORS AND WARNINGS
 	error = function(self, message)
 		if (self.errors_reported) then
-			error(message, math.huge)
+			error(message)
 		else
 			return message
 		end
@@ -108,14 +108,14 @@ lcore = {
 			local path = self:get_path(mod_name)
 
 			if (path) then
-				return self:fileget(mod_name, path, ...)
+				return self:load(mod_name, path, ...)
 			else
 				self:error("Couldn't load module '" .. mod_name .. "'")
 			end
 		end
 	end,
 
-	fileget = function(self, mod_name, path, ...)
+	load = function(self, mod_name, path, ...)
 		local success, chunk, err = pcall(love.filesystem.load, path)
 
 		if (not success or not chunk) then
@@ -125,6 +125,7 @@ lcore = {
 		local success, object = pcall(chunk, self, ...)
 
 		if (not success) then
+			print("FAILURE FOR", mod_name)
 			self:error(object)
 		end
 
