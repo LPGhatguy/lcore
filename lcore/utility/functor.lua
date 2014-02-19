@@ -12,9 +12,7 @@ local oop = L:get("utility.oop")
 local functor
 
 functor = oop:class()({
-	_new = function(self, new)
-		return new
-	end,
+	__functor = true,
 
 	__call = function(self)
 	end
