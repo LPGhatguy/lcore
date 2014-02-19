@@ -36,7 +36,7 @@ core = {
 						else
 							local good, fail = pcall(chunk, L)
 							if (good) then
-								report(verbose, "RUNTIME", "SUCCESS", path)
+								report(verbose, "RUNTIME" .. " SUCCESS: " .. path)
 							else
 								success = false
 								print("RUNTIME", "ERROR", fail)
@@ -44,7 +44,7 @@ core = {
 						end
 					else
 						success = false
-						report(verbose, "COMPILE", "ERROR", fail)
+						report(verbose, "COMPILE" .. " ERROR: " .. fail)
 					end
 				end
 			end
