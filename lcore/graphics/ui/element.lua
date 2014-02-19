@@ -15,6 +15,7 @@ local element
 element = oop:class()({
 	x = 0,
 	y = 0,
+	z = 0,
 	ox = 0,
 	oy = 0,
 
