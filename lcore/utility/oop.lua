@@ -50,8 +50,8 @@ oop = {
 			args[key] = resolve(value)
 		end
 
-		for step, object in pairs(args) do
-			for key, value in pairs(object) do
+		for step, class in pairs(args) do
+			for key, value in pairs(class) do
 				local typed = type(value)
 
 				if (typed == "function") then
