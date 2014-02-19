@@ -201,6 +201,23 @@ etable = {
 		end
 
 		return target
+	end,
+
+	--[[
+	@method contains
+	#title Contains Value
+	#def (table source, mixed value)
+	#return boolean result
+	#desc Returns whether the desired value exists in the table
+	]]
+	contains = function(self, source, value)
+		for key, compare in pairs(source) do
+			if (compare == value) then
+				return true
+			end
+		end
+
+		return false
 	end
 }
 
@@ -272,6 +289,10 @@ if (L.debug) then
 		self:invert(a, b)
 		suite:test("invert-self", self:equal(a, c))
 		suite:test("invert-target", self:equal(a, b))
+
+
+
+		--todo: tests for table.contains
 
 		return suite
 	end
