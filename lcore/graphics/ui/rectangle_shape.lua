@@ -1,6 +1,6 @@
 --[[
-#id graphics.ui.box
-#title UI Box Superclass
+#id graphics.ui.rectangle_shape
+#title UI Rectangle Superclass
 #status production
 #version 1.0
 
@@ -10,9 +10,9 @@
 local L = (...)
 local oop = L:get("utility.oop")
 local element = L:get("graphics.ui.element")
-local box
+local rectangle_shape
 
-box = oop:class(element)({
+rectangle_shape = oop:class(element)({
 	w = 0,
 	h = 0,
 
@@ -31,4 +31,4 @@ box = oop:class(element)({
 	end
 })
 
-return box
+return rectangle_shape
