@@ -88,32 +88,101 @@ color = {
 	#desc Adds a color of name `name` and components (r, g, b, a)
 	]]
 	add = function(self, name, r, g, b, a)
-		self.colors[name] = self:smake(r, g, b, a)
+		self.colors[name] = self:rgb_static(r, g, b, a)
 	end,
 
 	--[[
-	@method make
-	#title Make Color
-	#def ([number r, number g, number b, number a])
-	#returns table color
-	#desc Creates a color with components (r, g, b, a) and returns it
-	#desc `r`, `g`, and `b` default to 0, while `a` defaults to 255.
-	]]
-	make = function(self, r, g, b, a)
-		return {r or 0, g or 0, b or 0, a or 255}
-	end,
-
-	--static color make
-	--[[
-	@method smake
+	@method rgb_static
 	#title Make Static Color
 	#def ([number r, number g, number b, number a])
 	#returns table color
 	#desc Creates an immutable, static color object; used in system colors.
 	#see make
 	]]
-	smake = function(self, r, g, b, a)
+	rgb_static = function(self, r, g, b, a)
 		return {r or 0, g or 0, b or 0, a or 255, __nocopy = true, __immutable = true}
+	end,
+
+	--[[
+	@method rgb
+	#title Make Color from RGB
+	#def ([number r, number g, number b, number a])
+	#returns table color
+	#desc Creates an RGB color with components (r, g, b, a) and returns it.
+	#desc `r`, `g`, and `b` default to 0, while `a` defaults to 255.
+	]]
+	rgb = function(self, r, g, b, a)
+		return {r or 0, g or 0, b or 0, a or 255}
+	end,
+	
+	--[[
+	@method hsv
+	#title Make Color from HSV
+	#def ([number h, number s, number v, number a])
+	#returns table color
+	#desc Creates an RGB color with the HSV components (h, s, v, a) and returns it.
+	]]
+	hsv = function(self, h, s, v, a)
+		if (s <= 0) then
+			return v, v, v, a
+		end
+
+		h, s, v = ((h or 0) * 6) / 256, (s or 0) / 255, (v or 0) / 255
+		local c = v * s
+		local x = (1 - math.abs((h % 2) - 1)) * c
+		local m = (v - c)
+		local r, g, b
+
+		if (h < 1) then
+			r, g, b = c, x, 0
+		elseif (h < 2) then
+			r, g, b = x, c, 0
+		elseif (h < 3) then
+			r, g, b = 0, c, x
+		elseif (h < 4) then
+			r, g, b = 0, x, c
+		elseif (h < 5) then
+			r, g, b = x, 0, c
+		else
+			r, g, b = c, 0, x
+		end
+
+		return {(r + m) * 255, (g + m) * 255, (b + m) * 255, a}
+	end,
+
+	--[[
+	@method hsl
+	#title Make Color from HSL
+	#def ([number h, number s, number l, number a])
+	#returns table color
+	#desc Creates an RGB color with the HSL components (h, s, l, a) and returns it.
+	]]
+	hsl = function(self, h, s, l, a)
+		if (s <= 0) then
+	    	return l, l, l, a
+	    end
+
+		h, s, l = ((h or 0) * 6) / 256, (s or 0) / 255, (l or 0) / 255
+		local c = (1 - math.abs(2 * l - 1)) * s
+		local x = (1 - math.abs((h % 2) - 1)) * c
+		local m = (l - .5 * c)
+		local r, g, b
+
+		if (h < 1) then
+			r, g, b = c, x, 0
+		elseif (h < 2) then
+			r, g, b = x, c, 0
+		elseif (h < 3) then
+			r, g, b = 0, c, x
+		elseif (h < 4) then
+			r, g, b = 0, x, c
+		elseif (h < 5) then
+			r, g, b = x, 0, c
+		else
+			r, g, b = c, 0, x
+		end
+
+		return {(r + m) * 255, (g + m) * 255, (b + m) * 255, a}
 	end,
 
 	--[[
