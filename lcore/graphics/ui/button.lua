@@ -9,7 +9,7 @@
 
 local L = (...)
 local oop = L:get("utility.oop")
-local event = L:get("utility.event")
+local event = L:get("service.event")
 local button
 
 button = oop:class()({

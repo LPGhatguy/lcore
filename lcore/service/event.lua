@@ -1,5 +1,5 @@
 --[[
-#id utility.event
+#id service.event
 #title Extended Event Core
 #status production
 #version 1.0
