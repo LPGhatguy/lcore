@@ -4,50 +4,125 @@
 local L = require("lcore.core")
 local event = L:get("service.event")
 local oop = L:get("utility.oop")
-local stopwatch = L:get("debug.stopwatch")
+local color = L:get("graphics.color")
+local frame = L:get("graphics.ui.frame")
+local image = L:get("graphics.ui.image")
+local rectangle = L:get("graphics.ui.rectangle")
 
-local rectdraggable = oop:mix("graphics.ui.rectangle", "graphics.ui.draggable")
-local container = L:get("graphics.ui.container")
+local picker
 
-local draggers = container:new(0, 0, 50, 50)
+function love.load()
+	picker = frame:new(50, 50, 500, 400)
+	picker.hue = 0
+	picker.pick_x = 0
+	picker.pick_y = 0
 
-for index = 1, 10 do
-	local mine = rectdraggable:new(50 * index - 50, 50, 50, 50)
+	local palette = image:new(nil, 20, 20, 300, 200)
+	local palette_data
+	local slicer = image:new(nil, 340, 20, 40, 200)
+	local slicer_data
+	local outbox = rectangle:new(20, 240, 300, 40)
 
-	local val = 25.5
-	mine.border_color = {0, 0, 0, 0}
-	mine.background_color = {val * index, 0, 255 - val * index}
+	picker:add(palette)
+	picker:add(outbox)
+	picker:add(slicer)
 
-	mine.drag_start = function(self)
-		self.z = math.huge
+	local function update_outbox()
+		if (palette.down) then
+			local mx, my = love.mouse.getPosition()
 
-		draggers:sort()
-	end
-
-	mine.drag_end = function(self)
-		local target_x = math.min(love.window.getWidth(), math.max(0, math.floor(self.x / 50) * 50))
-		local target_y = math.min(love.window.getHeight(), math.max(0, math.floor(self.y / 50) * 50))
-		local swap_with = nil
-
-		for key, value in pairs(draggers.children) do
-			if (value.x == target_x and value.y == target_y) then
-				swap_with = value
-				break
+			if (palette:contains(mx, my)) then
+				local rx, ry = mx - palette.ox - palette.x, my - palette.oy - palette.y
+				outbox.background_color = {palette_data:getPixel(math.floor(rx), math.floor(ry))}
 			end
 		end
+	end
 
-		self.z = 0
+	local function update_palette()
+		palette_data:mapPixel(function(x, y)
+			return color:hsv(picker.hue * 255, x * 255 / 300, y * 255 / 200, 255)
+		end)
 
-		self.x = target_x
-		self.y = target_y
+		palette.image:refresh()
+		update_outbox()
+	end
 
-		if (swap_with) then
-			swap_with.x = self.sx
-			swap_with.y = self.sy
+	palette_data = love.image.newImageData(300, 200)
+	palette.image = love.graphics.newImage(palette_data)
+
+	palette.mousepressed = function(self, x, y)
+		if (self:contains(x, y)) then
+			self.down = true
 		end
 	end
 
-	draggers:add(mine)
+	palette.update = function(self, delta)
+		if (self.down) then
+			local mx, my = love.mouse.getPosition()
+
+			if (self:contains(mx, my)) then
+				local rx, ry = math.floor(mx - self.ox - self.x), math.floor(my - self.oy - self.y)
+				picker.pick_x, picker.pick_y = rx, ry
+
+				outbox.background_color = {palette_data:getPixel(rx, ry)}
+			end
+		end
+	end
+
+	palette.mousereleased = function(self, x, y)
+		if (self.down) then
+			self.down = false
+		end
+	end
+
+	palette.draw = function(self)
+		image.draw(self)
+
+		love.graphics.setColor(255, 255, 255)
+		love.graphics.setLineWidth(1)
+		love.graphics.circle("line", self.x + picker.pick_x, self.y + picker.pick_y, 4)
+	end
+
+	slicer_data = love.image.newImageData(40, 200)
+	slicer_data:mapPixel(function(x, y)
+		return color:hsv(y * 255 / 200, 255, 255)
+	end)
+	slicer.image = love.graphics.newImage(slicer_data)
+
+	slicer.mousepressed = palette.mousepressed
+	slicer.mousereleased = palette.mousereleased
+
+	slicer.update = function(self, delta)
+		if (self.down) then
+			local mx, my = love.mouse.getPosition()
+
+			if (self:contains(mx, my)) then
+				local ry = my - self.oy - self.y
+				picker.hue = ry / 200
+				update_palette()
+				update_outbox()
+			end
+		end
+	end
+
+	slicer.draw = function(self)
+		image.draw(self)
+
+		love.graphics.setColor(255, 255, 255, 255)
+		love.graphics.setLineWidth(1)
+		love.graphics.rectangle("line", self.x, self.y + picker.hue * 200, 40, 4)
+	end
+
+	event:hook("mousepressed", palette)
+	event:hook("mousepressed", slicer)
+
+	event:hook("mousereleased", palette)
+	event:hook("mousereleased", slicer)
+
+	event:hook("update", palette)
+	event:hook("update", slicer)
+
+	update_palette()
 end
 
 function love.mousepressed(...)
@@ -63,5 +138,5 @@ function love.update(delta)
 end
 
 function love.draw()
-	draggers:draw()
+	picker:draw()
 end
