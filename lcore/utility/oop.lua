@@ -6,7 +6,7 @@
 
 #desc Provides object orientation to the framework.
 
-##todo Optimize oop.mix
+##todo Look into optimizing oop.mix using mutable functable objects
 ]]
 
 local L = (...)
@@ -57,7 +57,7 @@ oop = {
 				if (typed == "function") then
 					if (not mixing[key]) then
 						mixing[key] = {value}
-					elseif (not etable:contains(mixing[key], value)) then
+					else
 						table.insert(mixing[key], value)
 					end
 				elseif (not result[key]) then
@@ -74,11 +74,12 @@ oop = {
 			if (#value > 1) then
 				result[key] = function(...)
 					local result
-					for index, func in pairs(value) do
-						result = {func(...)}
+
+					for index, functor in pairs(value) do
+						result = {functor(...)}
 					end
 
-					return unpack(result)
+					return result and unpack(result)
 				end
 			else
 				result[key] = value[1]
