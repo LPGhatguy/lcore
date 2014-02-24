@@ -1,34 +1,46 @@
 --[[
 #id graphics.ui.container
 #title UI Container
-#status needs-testing
-#version 1.0
+#status production
+#version 1.1
 
 #desc Holds other UI objects so they can work their magic.
 ]]
 
 local L = (...)
 local oop = L:get("utility.oop")
+local element = L:get("graphics.ui.element")
 local gcore = L:get("graphics.core")
 local container
 
-container = oop:class(rectangle)({
+local child_sorter = function(first, second)
+	if (first.z == second.z) then
+		return first.x < second.x
+	else
+		return first.z < second.z
+	end
+end
+
+container = oop:class(element)({
 	children = {},
 
 	add = function(self, item)
-		local id = #self.children + 1
-
-		self.children[id] = item
-		return id
+		table.insert(self.children, item)
 	end,
 
-	remove = function(self, id)
-		if (self.children[id]) then
-			self.children[id] = nil
-			return true
-		else
-			return false
+	remove = function(self, item)
+		for key, value in pairs(self.children) do
+			if (value == item) then
+				self.children[key] = nil
+				return true
+			end
 		end
+
+		return false
+	end,
+
+	sort = function(self)
+		table.sort(self.children, child_sorter)
 	end,
 
 	draw = function(self)
