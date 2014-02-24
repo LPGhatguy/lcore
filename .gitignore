@@ -1,9 +1,0 @@
-# SUBLIME TEXT
-*.sublime-workspace
-.gitignore
-.gitattributes
-
-# CUSTOM BUILD
-build.lua
-version
-lcore.sublime-project
