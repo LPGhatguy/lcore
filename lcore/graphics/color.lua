@@ -112,7 +112,7 @@ color = {
 	#desc `r`, `g`, and `b` default to 0, while `a` defaults to 255.
 	]]
 	rgb = function(self, r, g, b, a)
-		return {r or 0, g or 0, b or 0, a or 255}
+		return r or 0, g or 0, b or 0, a or 255
 	end,
 	
 	--[[
@@ -147,7 +147,7 @@ color = {
 			r, g, b = c, 0, x
 		end
 
-		return {(r + m) * 255, (g + m) * 255, (b + m) * 255, a}
+		return (r + m) * 255, (g + m) * 255, (b + m) * 255, a or 255
 	end,
 
 	--[[
@@ -182,7 +182,7 @@ color = {
 			r, g, b = c, 0, x
 		end
 
-		return {(r + m) * 255, (g + m) * 255, (b + m) * 255, a}
+		return (r + m) * 255, (g + m) * 255, (b + m) * 255, a or 255
 	end,
 
 	--[[
