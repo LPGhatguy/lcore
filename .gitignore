@@ -1,2 +1,4 @@
 # SUBLIME TEXT
 *.sublime-workspace
+.gitignore
+.gitattributes
