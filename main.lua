@@ -28,14 +28,7 @@ function love.load()
 	picker:add(slicer)
 
 	local function update_outbox()
-		if (palette.down) then
-			local mx, my = love.mouse.getPosition()
-
-			if (palette:contains(mx, my)) then
-				local rx, ry = mx - palette.ox - palette.x, my - palette.oy - palette.y
-				outbox.background_color = {palette_data:getPixel(math.floor(rx), math.floor(ry))}
-			end
-		end
+			outbox.background_color = {palette_data:getPixel(picker.pick_x, picker.pick_y)}
 	end
 
 	local function update_palette()
@@ -100,7 +93,6 @@ function love.load()
 				local ry = my - self.oy - self.y
 				picker.hue = ry / 200
 				update_palette()
-				update_outbox()
 			end
 		end
 	end
@@ -110,7 +102,7 @@ function love.load()
 
 		love.graphics.setColor(255, 255, 255, 255)
 		love.graphics.setLineWidth(1)
-		love.graphics.rectangle("line", self.x, self.y + picker.hue * 200, 40, 4)
+		love.graphics.rectangle("line", self.x, self.y - 1 + picker.hue * 200, 40, 4)
 	end
 
 	event:hook("mousepressed", palette)
