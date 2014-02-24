@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+<head>
+<title>utility.table</title>
+<style type="text/css">
+body {
+	font-family: monospace;
+	padding: 0;
+	margin: 0;
+
+	background-color: black;
+	color: white;
+}
+
+.child {
+	border-top-style: groove;
+	border-bottom-style: groove;
+	border-width: 2px;
+	border-color: gray;
+
+	padding: 4px;
+	margin: 0;
+}
+
+.def {
+	color: #B81F11;
+	font-weight: bold;
+}
+
+.returns {
+	color: #FFE318;
+	font-weight: bold;
+}
+
+.title {
+	color: gray;
+}
+
+.desc {
+	font-style: italic;
+}
+
+.id {
+	font-style: italic;
+}
+
+.status {
+	font-weight: bold;
+}
+
+.s-needs-testing:after {
+	content: "Needs Testing";
+	color: #FFE318;
+}
+
+.s-incomplete:after {
+	content: "Incomplete";
+	color: #B81F11;
+}
+
+.s-production:after {
+	content: "Production";
+	color: #089708;
+}
+</style>
+</head>
+
+<body>
+<div id="root">
+
+<div id="properties">
+<h1 class="title">Table Extension Library</h1>
+<h2>ID: <span class="id">utility.table</span></h2>
+
+<br />
+<h3>version 1.0</h3>
+<h3>Status: <span class="status s-production"> </span></h3>
+<br />
+
+<p class="desc">Provides extensions for operating on tables that Lua doesn't have by default.</p>
+
+<h3>TODO</h3>
+<ul class="todos">
+no todos
+</ul>
+</div>
+
+<div id="children">
+<div class="child method" id="equal">
+<h2 class="title">Equality</h2>
+<p><span class="returns">boolean result, [mixed error_key]</span> <span class="def">utility.table.equal(table first, table second, [boolean no_reverse])</span></p>
+<p class="desc">Checks if each value of tables first and second are equal.
+<br />If result is false, error_key contains the first key where a mismatch occured.
+<br />If no_reverse is true, only first is iterated through. This is used internally.</p>
+</div>
+<div class="child method" id="congruent">
+<h2 class="title">Congruency</h2>
+<p><span class="returns">boolean result, [mixed error_key]</span> <span class="def">utility.table.congruent(table first, table second, [boolean no_reverse])</span></p>
+<p class="desc">Checks if first and second are equal recursively. Tables are iterated through.
+<br />If result is false, error_key contains the first key where a mismatch occured.
+<br />If no_reverse is true, only first is iterated through. This is used internally.</p>
+</div>
+<div class="child method" id="copylock">
+<h2 class="title">Copylock</h2>
+<p><span class="returns">table target</span> <span class="def">utility.table.copylock(table target)</span></p>
+<p class="desc">Sets a flag in the table that forces copying and merging functions to not copy this table.</p>
+</div>
+<div class="child method" id="copy">
+<h2 class="title">Shallow Copy</h2>
+<p><span class="returns">table target</span> <span class="def">utility.table.copy(table source, [table target])</span></p>
+<p class="desc">Performs a shallow copy from source to target.
+<br />If target is not specified, a new table is created. The location copied to is returned.</p>
+</div>
+<div class="child method" id="deepcopy">
+<h2 class="title">Deep Copy</h2>
+<p><span class="returns">table target</span> <span class="def">utility.table.deepcopy(table source, [table target, boolean break_lock])</span></p>
+<p class="desc">Performs a deep copy from source to target.
+<br />If a target is not specified, a new table is created. The location copied to is returned.
+<br />If break_lock is true, any copylocked tables are copied anyway.</p>
+</div>
+<div class="child method" id="merge">
+<h2 class="title">Shallow Merge</h2>
+<p><span class="returns">table target</span> <span class="def">utility.table.merge(table source, table target)</span></p>
+<p class="desc">Performs a shallow merge from source to target.
+<br />Values from source are copied into target unless they already exist.</p>
+</div>
+<div class="child method" id="copymerge">
+<h2 class="title">Shallow Copy-Merge</h2>
+<p><span class="returns">table target</span> <span class="def">utility.table.copymerge(table source, table target)</span></p>
+<p class="desc">Performs a shallow merge from source to target.
+<br />Values from source are copied into target unless they already exist.
+<br />Table values are copied unless they are copylocked.
+<br />If break_lock is true, any copylocked tables are copied anyway.</p>
+</div>
+<div class="child method" id="invert">
+<h2 class="title">Invert</h2>
+<p><span class="returns">table target</span> <span class="def">utility.table.invert(table source, [table target])</span></p>
+<p class="desc">Inverts the table source into target. All keys become values and vice versa.
+<br />Behavior with duplicate values is undefined.
+<br />If not target is not defined, a new table will be created.</p>
+</div>
+<div class="child method" id="contains">
+<h2 class="title">Contains Value</h2>
+<p><span class="returns"></span> <span class="def">utility.table.contains(table source, mixed value)</span></p>
+<p class="desc">Returns whether the desired value exists in the table</p>
+</div>
+
+</div>
+
+</div>
+</body>
+</html>

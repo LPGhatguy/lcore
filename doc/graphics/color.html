@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+<head>
+<title>graphics.color</title>
+<style type="text/css">
+body {
+	font-family: monospace;
+	padding: 0;
+	margin: 0;
+
+	background-color: black;
+	color: white;
+}
+
+.child {
+	border-top-style: groove;
+	border-bottom-style: groove;
+	border-width: 2px;
+	border-color: gray;
+
+	padding: 4px;
+	margin: 0;
+}
+
+.def {
+	color: #B81F11;
+	font-weight: bold;
+}
+
+.returns {
+	color: #FFE318;
+	font-weight: bold;
+}
+
+.title {
+	color: gray;
+}
+
+.desc {
+	font-style: italic;
+}
+
+.id {
+	font-style: italic;
+}
+
+.status {
+	font-weight: bold;
+}
+
+.s-needs-testing:after {
+	content: "Needs Testing";
+	color: #FFE318;
+}
+
+.s-incomplete:after {
+	content: "Incomplete";
+	color: #B81F11;
+}
+
+.s-production:after {
+	content: "Production";
+	color: #089708;
+}
+</style>
+</head>
+
+<body>
+<div id="root">
+
+<div id="properties">
+<h1 class="title">Color Core</h1>
+<h2>ID: <span class="id">graphics.color</span></h2>
+
+<br />
+<h3>version 1.0</h3>
+<h3>Status: <span class="status s-production"> </span></h3>
+<br />
+
+<p class="desc">Lists named colors and provides color manipulation functions.</p>
+
+<h3>TODO</h3>
+<ul class="todos">
+no todos
+</ul>
+</div>
+
+<div id="children">
+<div class="child method" id="get">
+<h2 class="title">Get Color</h2>
+<p><span class="returns">table result, boolean success</span> <span class="def">graphics.color.get(string name)</span></p>
+<p class="desc">Returns the color with the name `name`.</p>
+</div>
+<div class="child method" id="set">
+<h2 class="title">Set Color</h2>
+<p><span class="returns">boolean success</span> <span class="def">graphics.color.set(string name)</span></p>
+<p class="desc">Sets the color for use in drawing.
+<br />Equivalent to love.graphics.setColor(color:get(name)), but with protection.
+<br />Addtionally, issues a warning on failure.</p>
+</div>
+<div class="child method" id="add">
+<h2 class="title">Add Color</h2>
+<p><span class="returns">void</span> <span class="def">graphics.color.add(string name, number r, number g, number b, number a)</span></p>
+<p class="desc">Adds a color of name `name` and components (r, g, b, a)</p>
+</div>
+<div class="child method" id="rgb_static">
+<h2 class="title">Make Static Color</h2>
+<p><span class="returns">table color</span> <span class="def">graphics.color.rgb_static([number r, number g, number b, number a])</span></p>
+<p class="desc">Creates an immutable, static color object; used in system colors.</p>
+</div>
+<div class="child method" id="rgb">
+<h2 class="title">Make Color from RGB</h2>
+<p><span class="returns">table color</span> <span class="def">graphics.color.rgb([number r, number g, number b, number a])</span></p>
+<p class="desc">Creates an RGB color with components (r, g, b, a) and returns it.
+<br />`r`, `g`, and `b` default to 0, while `a` defaults to 255.</p>
+</div>
+<div class="child method" id="hsv">
+<h2 class="title">Make Color from HSV</h2>
+<p><span class="returns">table color</span> <span class="def">graphics.color.hsv([number h, number s, number v, number a])</span></p>
+<p class="desc">Creates an RGB color with the HSV components (h, s, v, a) and returns it.</p>
+</div>
+<div class="child method" id="hsl">
+<h2 class="title">Make Color from HSL</h2>
+<p><span class="returns">table color</span> <span class="def">graphics.color.hsl([number h, number s, number l, number a])</span></p>
+<p class="desc">Creates an RGB color with the HSL components (h, s, l, a) and returns it.</p>
+</div>
+<div class="child method" id="mix">
+<h2 class="title">Color Mix</h2>
+<p><span class="returns">color target</span> <span class="def">graphics.color.mix(number ratio, color first, color second, [color target])</span></p>
+<p class="desc">Mixes colors `first` and `second`, putting the result in `target`.
+<br />By default, `target` is a new color object.</p>
+</div>
+
+</div>
+
+</div>
+</body>
+</html>
