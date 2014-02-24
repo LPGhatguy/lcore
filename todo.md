@@ -1,3 +1,2 @@
 TODO
--Make templates! (container object like graphics.color and graphics.theme)
--Reevaluate class loading
+-Make some form of templates! (container object like graphics.color and graphics.theme)
