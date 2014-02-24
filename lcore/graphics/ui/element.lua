@@ -19,6 +19,13 @@ element = oop:class()({
 	ox = 0,
 	oy = 0,
 
+	_new = function(self, new, x, y)
+		new.x = x or 0
+		new.y = y or 0
+
+		return new
+	end,
+
 	draw = function(self)
 		self.ox = gcore.x
 		self.oy = gcore.y
