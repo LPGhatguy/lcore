@@ -9,11 +9,11 @@
 
 local L = (...)
 local oop = L:get("utility.oop")
-local rectangle_shape = L:get("graphics.ui.rectangle_shape")
+local rectangle = L:get("graphics.ui.rectangle")
 local color = L:get("graphics.color")
 local image
 
-image = oop:class(rectangle_shape)({
+image = oop:class(rectangle)({
 	image = nil,
 
 	_new = function(self, new, image, x, y, w, h)
@@ -27,7 +27,7 @@ image = oop:class(rectangle_shape)({
 	end,
 
 	draw = function(self)
-		rectangle_shape.draw(self)
+		rectangle.draw(self)
 
 		love.graphics.setColor(255, 255, 255)
 
@@ -37,8 +37,6 @@ image = oop:class(rectangle_shape)({
 			else
 				love.graphics.draw(self.image, self.x, self.y)
 			end
-		else
-			love.graphics.rectangle("fill", self.x, self.y, self.w, self.h)
 		end
 	end
 })
