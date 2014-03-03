@@ -121,6 +121,7 @@ color = {
 	#def ([number h, number s, number v, number a])
 	#returns table color
 	#desc Creates an RGB color with the HSV components (h, s, v, a) and returns it.
+	#desc Inputs are between (0, 0, 0, 0) and (360, 100, 100, 255)
 	]]
 	hsv = function(self, h, s, v, a)
 		if (s <= 0) then
@@ -156,7 +157,7 @@ color = {
 	#def ([number h, number s, number l, number a])
 	#returns table color
 	#desc Creates an RGB color with the HSL components (h, s, l, a) and returns it.
-	#desc Inputs are on the range (0, 0, 0, 0)
+	#desc Inputs are between (0, 0, 0, 0) and (360, 100, 100, 255)
 	]]
 	hsl = function(self, h, s, l, a)
 		if (s <= 0) then
