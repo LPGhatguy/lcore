@@ -15,7 +15,11 @@ local container
 
 local child_sorter = function(first, second)
 	if (first.z == second.z) then
-		return first.x < second.x
+		if (first.x == second.x) then
+			return first.y < second.y
+		else
+			return first.x < second.x
+		end
 	else
 		return first.z < second.z
 	end
@@ -24,8 +28,14 @@ end
 container = oop:class(element)({
 	children = {},
 
-	add = function(self, item)
-		table.insert(self.children, item)
+	add = function(self, ...)
+		local arg = {...}
+
+		for index = 1, #arg do
+			table.insert(self.children, arg[index])
+		end
+
+		self:sort()
 	end,
 
 	remove = function(self, item)
@@ -37,6 +47,16 @@ container = oop:class(element)({
 		end
 
 		return false
+	end,
+
+	fire = function(self, event_name, ...)
+		for index = 1, #self.children do
+			local child = self.children[index]
+
+			if (child[event_name]) then
+				child[event_name](child, ...)
+			end
+		end
 	end,
 
 	sort = function(self)
