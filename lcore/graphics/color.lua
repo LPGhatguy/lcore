@@ -127,7 +127,7 @@ color = {
 			return v, v, v, a
 		end
 
-		h, s, v = ((h or 0) * 6) / 256, (s or 0) / 255, (v or 0) / 255
+		h, s, v = ((h or 0) * 6) / 360, (s or 0) / 100, (v or 0) / 100
 		local c = v * s
 		local x = (1 - math.abs((h % 2) - 1)) * c
 		local m = (v - c)
@@ -156,13 +156,14 @@ color = {
 	#def ([number h, number s, number l, number a])
 	#returns table color
 	#desc Creates an RGB color with the HSL components (h, s, l, a) and returns it.
+	#desc Inputs are on the range (0, 0, 0, 0)
 	]]
 	hsl = function(self, h, s, l, a)
 		if (s <= 0) then
 	    	return l, l, l, a
 	    end
 
-		h, s, l = ((h or 0) * 6) / 256, (s or 0) / 255, (l or 0) / 255
+		h, s, l = ((h or 0) * 6) / 360, (s or 0) / 100, (l or 0) / 100
 		local c = (1 - math.abs(2 * l - 1)) * s
 		local x = (1 - math.abs((h % 2) - 1)) * c
 		local m = (l - .5 * c)
