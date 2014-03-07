@@ -11,47 +11,8 @@
 ]]
 
 local L = (...)
-
+local fs = L:get("utility.filesystem")
 local version
-
-local read = function(filename)
-	if (love) then
-		return love.filesystem.read(filename)
-	else
-		local handle = io.open(filename, "r")
-		
-		if (handle) then
-			local body = handle:read()
-			handle:close()
-
-			return body
-		end
-	end
-end
-
-local write = function(filename, body)
-	if (love) then
-		return love.filesystem.write(filename, body)
-	else
-		local handle = io.open(filename, "w")
-
-		if (handle) then
-			handle:write(body)
-			handle:close()
-
-			return true
-		end
-	end
-end
-
-local warn = function(...)
-	if (L) then
-		return L:warn(...)
-	else
-		print(...)
-		return (...)
-	end
-end
 
 version = {
 	filename = "version",
@@ -80,18 +41,18 @@ version = {
 			return self.current
 		else
 			if (not love or love.filesystem.exists(self.filename)) then
-				local source = read(self.filename)
+				local source = fs.read(self.filename)
 				local version = {}
 
 				if (source) then
 					version = self:parse(source)
 				else
-					return false, warn("Could not read version - read error!")
+					return false, L:warn("Could not read version - read error!")
 				end
 
 				return version
 			else
-				return false, warn("Could not read version - no version file to read!")
+				return false, L:warn("Could not read version - no version file to read!")
 			end
 		end
 	end,
@@ -102,13 +63,13 @@ version = {
 		if (version) then
 			self.current = version
 			
-			if (write(self.filename, self:tostring())) then
+			if (fs.write(self.filename, self:tostring())) then
 				return true
 			else
-				return false, warn("Could not write version file - unable to open file!")
+				return false, L:warn("Could not write version file - unable to open file!")
 			end
 		else
-			return false, warn("Could not write version file - no version to write!")
+			return false, L:warn("Could not write version file - no version to write!")
 		end
 	end,
 
