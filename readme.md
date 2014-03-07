@@ -2,7 +2,7 @@
 Howdy! This is LCORE, a framework designed for LOVE, presently supporting the latest release, 0.9.0. LCORE seeks to *extend* applications instead of take complete control of them. It contains facilities for OOP that are easy to interop with, the beginning of static typing, basic debugging facilities, simple data structures, an event manager, and a large collection of extensible graphics and UI elements.
 
 I (Lucien Greathouse) am the only one working on the project, and its execution is presently tested on the following platforms:
-- Windows 8 Pro (64-bit)
+- Windows 8.1 Pro (64-bit)
 - Windows 7 Pro (64-bit)
 - Android 4.1.1 (using LOVE for Android)
 
