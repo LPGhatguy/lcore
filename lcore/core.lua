@@ -16,13 +16,36 @@ local root = (...):match("(.+)%..-$") or (...)
 local lcore
 local test
 
+local fs_exists = function(path)
+	if (lcore.platform == "love") then
+		return love.filesystem.exists(path)
+	else
+		local handle = io.open(path, "r")
+
+		if (handle) then
+			handle:close()
+			return true
+		end
+	end
+end
+
+local fs_load = function(path)
+	if (lcore.platform == "love") then
+		return love.filesystem.load(path)
+	else
+		return loadfile(path)
+	end
+end
+
 lcore = {
+	platform = "love",
+	platform_version = "0.9.0",
+	framework_version = "1.2.0",
 	notices_reported = true,
 	errors_reported = true,
 	warnings_reported = true,
 	warnings_as_errors = false,
 	autotest = false,
-	safe_load = false,
 	debug = true,
 
 	path = {root, ""},
@@ -82,15 +105,8 @@ lcore = {
 		for index, value in next, self.path do
 			local path = self:module_to_path(value .. "." .. mod)
 
-			if (love.filesystem.exists(path)) then
-				return path, "love"
-			else
-				local handle = io.open(path, "r")
-
-				if (handle) then
-					handle:close()
-					return path, "io"
-				end
+			if (fs_exists(path)) then
+				return path
 			end
 		end
 
@@ -116,7 +132,7 @@ lcore = {
 	end,
 
 	load = function(self, mod_name, path, ...)
-		local success, chunk, err = pcall(love.filesystem.load, path)
+		local success, chunk = pcall(love.filesystem.load, path)
 
 		if (not success or not chunk) then
 			self:error(chunk)
