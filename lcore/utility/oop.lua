@@ -11,7 +11,7 @@
 
 local L = (...)
 
-local etable = L:get("utility.table")
+local utable = L:get("utility.table")
 local oop
 
 --Checks an argument for whether it's a type or a type identifier
@@ -22,20 +22,20 @@ end
 oop = {
 	--@method objectify
 	objectify = function(self, target)
-		etable:merge(self.object, target)
+		utable:merge(self.object, target)
 
 		return target
 	end,
 
 	--@method class
 	class = function(self, ...)
-		local new = etable:merge(self.object, {})
+		local new = utable:merge(self.object, {})
 		new:inherit(...)
 
 		return function(target)
 			target = target or {}
 			
-			etable:merge(new, target)
+			utable:merge(new, target)
 			return target
 		end
 	end,
@@ -62,7 +62,7 @@ oop = {
 					end
 				elseif (not result[key]) then
 					if (typed == "table") then
-						result[key] = etable:deepcopy(value)
+						result[key] = utable:deepcopy(value)
 					else
 						result[key] = value
 					end
@@ -96,14 +96,14 @@ oop = {
 			local args = {...}
 
 			for key = 1, #args do
-				etable:merge(resolve(args[key]), self)
+				utable:merge(resolve(args[key]), self)
 			end
 
 			return self
 		end,
 
 		copy = function(self)
-			return etable:deepcopy(self)
+			return utable:deepcopy(self)
 		end,
 
 		new = function(self, ...)
