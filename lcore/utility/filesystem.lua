@@ -24,15 +24,18 @@ local value_iterator = function(source)
 	end
 end
 
-fs["love"] = {
-	read = love.filesystem.read,
-	write = love.filesystem.write,
-	exists = love.filesystem.exists,
-	list = love.filesystem.getDirectoryItems,
-	iterate = function(path)
-		return value_iterator(love.filesystem.getDirectoryItems(path))
-	end
-}
+--What is love?
+if (love) then
+	fs["love"] = {
+		read = love.filesystem.read,
+		write = love.filesystem.write,
+		exists = love.filesystem.exists,
+		list = love.filesystem.getDirectoryItems,
+		iterate = function(path)
+			return value_iterator(love.filesystem.getDirectoryItems(path))
+		end
+	}
+end
 
 fs["lua"] = {
 	read = function(path)
@@ -102,4 +105,4 @@ setmetatable(fs_interface, {
 	end
 })
 
-return fs
+return fs_interface
