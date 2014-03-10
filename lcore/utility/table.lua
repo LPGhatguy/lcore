@@ -10,10 +10,10 @@
 
 local L = (...)
 
-local etable
+local utable
 local test
 
-etable = {
+utable = {
 	--[[
 	@method equal
 	#title Equality
@@ -31,7 +31,7 @@ etable = {
 		end
 
 		if (not no_reverse) then
-			return etable:equal(second, first, true)
+			return utable:equal(second, first, true)
 		else
 			return true
 		end
@@ -52,7 +52,7 @@ etable = {
 
 			if (type(value) == type(value2)) then
 				if (type(value) == "table") then
-					if (not etable:congruent(value, value2)) then
+					if (not utable:congruent(value, value2)) then
 						return false, key
 					end
 				else
@@ -66,7 +66,7 @@ etable = {
 		end
 
 		if (not no_reverse) then
-			return etable:congruent(second, first, true)
+			return utable:congruent(second, first, true)
 		else
 			return true
 		end
@@ -120,7 +120,7 @@ etable = {
 				if (value.__nocopy and not break_lock) then
 					target[key] = value
 				else
-					target[key] = etable:deepcopy(value)
+					target[key] = utable:deepcopy(value)
 				end
 			else
 				target[key] = value
@@ -171,7 +171,7 @@ etable = {
 			if (not target[key]) then
 				if (type(value) == "table") then
 					if (not value.__nocopy and not break_lock) then
-						target[key] = etable:copy(value)
+						target[key] = utable:copy(value)
 					else
 						target[key] = value
 					end
@@ -223,7 +223,7 @@ etable = {
 
 --NOMINI START
 if (L.debug) then
-	etable.__test = function(self, test)
+	utable.__test = function(self, test)
 		local suite = test:suite("Table Extension Library")
 		local a, b, c, d
 
@@ -299,4 +299,4 @@ if (L.debug) then
 end
 --NOMINI END
 
-return etable
+return utable
