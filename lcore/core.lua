@@ -20,11 +20,13 @@ local fs_exists = function(path)
 	if (lcore.platform == "love") then
 		return love.filesystem.exists(path)
 	else
-		local handle = io.open(path, "r")
+		local handle, err = io.open(path, "r")
 
 		if (handle) then
 			handle:close()
 			return true
+		else
+			return nil, err
 		end
 	end
 end
@@ -38,7 +40,7 @@ local fs_load = function(path)
 end
 
 lcore = {
-	platform = "love",
+	platform = love and "love" or "lua",
 	platform_version = "0.9.0",
 	framework_version = "1.2.0",
 	notices_reported = true,
@@ -47,6 +49,7 @@ lcore = {
 	warnings_as_errors = false,
 	autotest = false,
 	debug = true,
+	base_directory = "",
 
 	path = {root, ""},
 	loaded = {},
@@ -56,21 +59,23 @@ lcore = {
 		for key, value in pairs(settings) do
 			self[key] = value
 		end
+
+		return self
 	end,
 
 	--UTILITY METHODS
 	module_to_path = function(self, mod)
-		return mod:gsub("%.", "/"):gsub("~", "..") .. ".lua"
+		return self.base_directory .. mod:gsub("%.", "/"):gsub("~", "..") .. ".lua"
 	end,
 
 	path_to_module = function(self, path)
-		return path:gsub("/", "%."):match("(.-)%.%w-$")
+		return path:gsub(self.base_directory, ""):gsub("/", "%."):match("(.-)%.%w-$")
 	end,
 
 	--ERRORS AND WARNINGS
 	error = function(self, message)
 		if (self.errors_reported) then
-			error(message)
+			error(message or "unknown error")
 		else
 			return message
 		end
@@ -83,17 +88,21 @@ lcore = {
 	warn = function(self, message)
 		if (self.warnings_reported) then
 			if (self.warnings_as_errors) then
-				error(message, 4)
+				error(message or "unknown error", 4)
 			else
 				print(message)
 			end
 		end
+
+		return message
 	end,
 
 	notice = function(self, message)
 		if (self.notices_reported) then
 			print(message)
 		end
+
+		return message
 	end,
 
 	parse_lua_error = function(self, err)
@@ -132,7 +141,7 @@ lcore = {
 	end,
 
 	load = function(self, mod_name, path, ...)
-		local success, chunk = pcall(love.filesystem.load, path)
+		local success, chunk = pcall(fs_load, path)
 
 		if (not success or not chunk) then
 			self:error(chunk)
@@ -161,7 +170,7 @@ lcore = {
 
 setmetatable(lcore, {
 	__call = function(self, ...)
-		self:configure(...)
+		return self:configure(...)
 	end
 })
 
