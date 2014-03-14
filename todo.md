@@ -30,3 +30,4 @@
 - Static-typing utilities (type)
 - Network manager (service.network)
 - Localization (service.locale)
+- Templates (template)
