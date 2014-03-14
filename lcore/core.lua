@@ -6,7 +6,7 @@
 
 #desc Provides the basis for everything in the framework.
 
-##todo More granular errors/warnings/notices
+##todo Allow deprecation/tracing of tables
 ]]
 
 if (type(...) ~= "string") then
@@ -109,7 +109,7 @@ L = {
 		return mod:gsub("%.", "/"):gsub("~", "..") .. ".lua"
 	end,
 
-	method_name = function(method, name)
+	method_name = function(self, method, name)
 		local info = debug.getinfo(method)
 
 		return info.name
