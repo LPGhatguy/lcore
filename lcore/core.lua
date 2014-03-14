@@ -1,7 +1,7 @@
 --[[
 #id lcore
 #title LCORE
-#version 1.2.0
+#version 0.1.0
 #status production
 
 #desc Provides the basis for everything in the framework.
@@ -42,7 +42,7 @@ end
 lcore = {
 	platform = love and "love" or "lua",
 	platform_version = "0.9.0",
-	framework_version = "1.2.0",
+	framework_version = "0.1.0",
 	notices_reported = true,
 	errors_reported = true,
 	warnings_reported = true,
@@ -113,9 +113,13 @@ lcore = {
 	get_path = function(self, mod)
 		for index, value in next, self.path do
 			local path = self:module_to_path(value .. "." .. mod)
+			self:notice("Checking path '" .. path .. "'")
 
 			if (fs_exists(path)) then
+				self:notice("Path successful.")
 				return path
+			else
+				self:notice("Path failed.")
 			end
 		end
 
@@ -124,6 +128,8 @@ lcore = {
 
 	add_path = function(self, path)
 		table.insert(self.path, path)
+		
+		return self
 	end,
 
 	get = function(self, mod_name, ...)
