@@ -1,10 +1,12 @@
 --[[
 #id lcore
 #title LCORE
-#version 0.1.0
+#version 0.2.0
 #status production
 
 #desc Provides the basis for everything in the framework.
+
+##todo More granular errors/warnings/notices
 ]]
 
 if (type(...) ~= "string") then
@@ -13,11 +15,11 @@ end
 
 local root = (...):match("(.+)%..-$") or (...)
 
-local lcore
-local test
+local N
+local L
 
 local fs_exists = function(path)
-	if (lcore.platform == "love") then
+	if (L.platform == "love") then
 		return love.filesystem.exists(path)
 	else
 		local handle, err = io.open(path, "r")
@@ -32,26 +34,65 @@ local fs_exists = function(path)
 end
 
 local fs_load = function(path)
-	if (lcore.platform == "love") then
+	if (L.platform == "love") then
 		return love.filesystem.load(path)
 	else
 		return loadfile(path)
 	end
 end
 
-lcore = {
+N = {
+	deprecated = function(method, name)
+		local output = "Function '"
+			.. (name or L:method_name(method, name))
+			.. "' is deprecated."
+
+		return function(...)
+			L:report("deprecation", output)
+			return method(...)
+		end
+	end,
+
+	traced = function(method, name)
+		local output = "Function '"
+		.. (name or L:method_name(method, name))
+		.. "' was called!"
+
+		return function(...)
+			L:report("trace", output)
+			return method(...)
+		end
+	end,
+
+	hooked = function(target, method)
+		return function(...)
+			method(...)
+			return target(...)
+		end
+	end
+}
+
+L = {
+	N = N,
+
 	platform = love and "love" or "lua",
 	platform_version = "0.9.0",
-	framework_version = "0.1.0",
+	framework_version = "0.2.0",
+
+	report_level = {
+		default = "warn",
+		deprecation = "warn",
+		trace = "notice",
+		module_found = "none",
+	},
+
 	notices_reported = true,
 	errors_reported = true,
 	warnings_reported = true,
 	warnings_as_errors = false,
-	autotest = false,
 	debug = true,
-	base_directory = "",
 
-	path = {root, ""},
+	path = {root .. ".", ""},
 	loaded = {},
 
 	--HIGHER-ORDER METHODS
@@ -65,24 +106,48 @@ lcore = {
 
 	--UTILITY METHODS
 	module_to_path = function(self, mod)
-		return self.base_directory .. mod:gsub("%.", "/"):gsub("~", "..") .. ".lua"
+		return mod:gsub("%.", "/"):gsub("~", "..") .. ".lua"
 	end,
 
-	path_to_module = function(self, path)
-		return path:gsub(self.base_directory, ""):gsub("/", "%."):match("(.-)%.%w-$")
+	method_name = function(method, name)
+		local info = debug.getinfo(method)
+
+		return info.name
+			or ("@" .. (info.short_src:match("[^/\\]+[\\/][^/\\]+$") or "(unknown file)")
+				.. ":" .. info.linedefined)
 	end,
 
 	--ERRORS AND WARNINGS
-	error = function(self, message)
-		if (self.errors_reported) then
-			error(message or "unknown error")
+	report = function(self, id, message)
+		message = message or "(no message)"
+		local level = self.report_level[id]
+
+		if (level == "none") then
+			return
+		end
+
+		local handler = self[level]
+
+		if (handler) then
+			handler(self, message)
 		else
-			return message
+			local default = self[self.default_report_level]
+
+			if (default) then
+				default(self, message)
+			else
+				self:error("Couldn't find message handler for '" .. id .. "'"
+					.. ", received: " .. message)
+			end
 		end
 	end,
 
-	xerror = function(err)
-		return debug.traceback(err)
+	error = function(self, message)
+		if (self.errors_reported) then
+			error("\n" .. (message or "unknown error"))
+		else
+			return message
+		end
 	end,
 
 	warn = function(self, message)
@@ -105,30 +170,27 @@ lcore = {
 		return message
 	end,
 
-	parse_lua_error = function(self, err)
-		return err
-	end,
-
 	--MODULE LOADING
 	get_path = function(self, mod)
+		local tried = {}
+
 		for index, value in next, self.path do
-			local path = self:module_to_path(value .. "." .. mod)
-			self:notice("Checking path '" .. path .. "'")
+			local path = self:module_to_path(value .. mod)
 
 			if (fs_exists(path)) then
-				self:notice("Path successful.")
+				self:report("module_found", "Module found in " .. path)
 				return path
 			else
-				self:notice("Path failed.")
+				table.insert(tried, path)
 			end
 		end
 
-		return nil
+		return nil, tried
 	end,
 
 	add_path = function(self, path)
 		table.insert(self.path, path)
-		
+
 		return self
 	end,
 
@@ -136,12 +198,13 @@ lcore = {
 		if (self.loaded[mod_name]) then
 			return self.loaded[mod_name]
 		else
-			local path = self:get_path(mod_name)
+			local path, attempts = self:get_path(mod_name)
 
 			if (path) then
 				return self:load(mod_name, path, ...)
 			else
-				self:error("Couldn't load module '" .. mod_name .. "'")
+				self:error("Couldn't find module '" .. mod_name .. "'"
+					.. "\n\nPaths tried:\n" .. table.concat(attempts, "\n"))
 			end
 		end
 	end,
@@ -156,8 +219,7 @@ lcore = {
 		local success, object = pcall(chunk, self, ...)
 
 		if (not success) then
-			print("FAILURE FOR", mod_name)
-			self:error(object)
+			self:error((mod_name or "unknown module") .. " error: " .. object)
 		end
 
 		if (object) then
@@ -174,95 +236,4 @@ lcore = {
 	end
 }
 
-setmetatable(lcore, {
-	__call = function(self, ...)
-		return self:configure(...)
-	end
-})
-
---[[
-@component Test Manager
-#id lcore.test
-#version 1.0
-#status production
-
-#desc Tests pieces of the framework and ensures sanity.
-]]
-test = {
-	instance_meta = {
-		__tostring = function(self)
-			return self:report()
-		end
-	},
-
-	instance_test = function(self, name, condition)
-		self.tested[name] = condition
-		table.insert(self.order, name)
-
-		self.total = self.total + 1
-
-		if (condition) then
-			self.success = self.success + 1
-		else
-			self.failure = self.failure + 1
-		end
-
-		return condition
-	end,
-
-	instance_section = function(self, name)
-		table.insert(self.order, name)
-		self.tested[name] = name
-	end,
-
-	instance_report = function(self)
-		local buffer = {}
-
-		for key, name in next, self.order do
-			local result = self.tested[name]
-
-			if (type(result) == "string") then
-				table.insert(buffer, "\n" .. result)
-			else
-				table.insert(buffer, name .. ": " .. (result and "SUCCESS" or "FAILURE"))
-			end
-		end
-
-		table.insert(buffer, "\nSuccess: " .. self.success)
-		table.insert(buffer, "Failure: " .. self.failure)
-		table.insert(buffer, "Total: " .. self.total)
-
-		return table.concat(buffer, "\n")
-	end,
-
-	suite = function(self, title)
-		local instance = {
-			title = title,
-			success = 0,
-			failure = 0,
-			total = 0,
-			tested = {},
-			order = {},
-
-			section = self.instance_section,
-			test = self.instance_test,
-			report = self.instance_report
-		}
-
-		setmetatable(instance, self.instance_meta)
-
-		return instance
-	end,
-
-	run = function(self, mod, name)
-		if (mod.__test) then
-			print(mod:__test(self))
-		else
-			L:notice("No tests written for " .. (name or "module"))
-		end
-	end
-}
-
-lcore.test = test
-
-return lcore
+return L
