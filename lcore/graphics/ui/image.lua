@@ -16,7 +16,8 @@ local image
 image = oop:class(rectangle)({
 	image = nil,
 
-	_new = function(self, new, image, x, y, w, h)
+	_new = function(self, new, manager, image, x, y, w, h)
+		new.manager = manager or new.manager
 		new.image = image
 		new.x = x or 0
 		new.y = y or 0

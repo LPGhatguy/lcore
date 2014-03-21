@@ -66,6 +66,7 @@ local function line_draw(self)
 end
 
 color_picker = oop:class(frame)({
+	child_manager = event:new(),
 	hsv = {0, 0, 0, 255},
 	rgb = {0, 0, 0, 255},
 
@@ -75,10 +76,11 @@ color_picker = oop:class(frame)({
 	output_box_backing = nil,
 	numerics_box = nil,
 
-	_new = function(self, new, x, y, w, h)
-		new = rectangle._new(self, new, x, y, w, h)
+	_new = function(self, new, manager, x, y, w, h)
+		new = rectangle._new(self, new, manager, x, y, w, h)
+		local child_manager = new.child_manager
 
-		new.box_picker = image:new(nil, 0, 0, w - 100, h)
+		new.box_picker = image:new(child_manager, nil, 0, 0, w - 100, h)
 		new.box_picker.image_data = love.image.newImageData(new.box_picker.w, new.box_picker.h)
 		new.box_picker.image = love.graphics.newImage(new.box_picker.image_data)
 		new.box_picker.border_width = 1
@@ -89,7 +91,7 @@ color_picker = oop:class(frame)({
 		new.box_picker.mousereleased = picker_mousereleased
 		new.box_picker.draw = box_draw
 
-		new.line_picker = image:new(nil, w - 90, 0, 20, h)
+		new.line_picker = image:new(child_manager, nil, w - 90, 0, 20, h)
 		new.line_picker.image_data = love.image.newImageData(new.line_picker.w, new.line_picker.h)
 		new.line_picker.image = love.graphics.newImage(new.line_picker.image_data)
 		new.line_picker.border_width = 1
@@ -99,14 +101,14 @@ color_picker = oop:class(frame)({
 		new.line_picker.mousereleased = picker_mousereleased
 		new.line_picker.draw = line_draw
 
-		new.output_box = rectangle:new(w - 69, 0, 69, 50)
+		new.output_box = rectangle:new(child_manager, w - 69, 0, 69, 50)
 		new.output_box.border_width = 1
 
 		new.output_box_backing = new.output_box:copy()
 		new.output_box_backing.background_color = {255, 255, 255}
 		new.output_box_backing.z = -1
 
-		new.numerics_box = frame:new(w - 69, 50, 69, h - 50)
+		new.numerics_box = frame:new(child_manager, w - 69, 50, 69, h - 50)
 		new.numerics_box.border_width = 1
 
 		new:add(new.box_picker, new.line_picker,
@@ -116,15 +118,13 @@ color_picker = oop:class(frame)({
 		new:redraw_line()
 		new:recompute_value()
 
-		event:hook("mousepressed", new)
-		event:hook("mousereleased", new)
-		event:hook("update", new)
+		new.manager:hook({"mousepressed", "mousereleased", "update"}, new)
 
 		return new
 	end,
 
 	_destroy = function(self)
-		event:unhook(self)
+		self.manager:unhook_object(self)
 	end,
 
 	mousepressed = function(self, ...)
@@ -174,9 +174,19 @@ color_picker = oop:class(frame)({
 			(h - self.box_picker.value_y) * 100 / h,
 			255
 		}
-		self.rgb = {color:hsv(unpack(self.hsv))}
+		local r, g, b, a = color:hsv(unpack(self.hsv))
+		
+		self.rgb[1] = r
+		self.rgb[2] = g
+		self.rgb[3] = b
+		self.rgb[4] = a
 
 		self.output_box.background_color = self.rgb
+		self:value_changed()
+	end,
+
+	value_changed = function(self)
+		--event
 	end
 })
 

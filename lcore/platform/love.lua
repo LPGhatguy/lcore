@@ -25,6 +25,7 @@ L_love = {
 		love.timer.step()
 
 		local dt = 0
+		local global = event.global
 
 		while (true) do
 			love.event.pump()
@@ -32,14 +33,14 @@ L_love = {
 			for e, a, b, c, d in love.event.poll() do
 				if (e == "quit") then
 					if (not love.quit or not love.quit()) then
-						event:fire("quit")
+						global:fire("quit")
 						love.audio.stop()
 						return
 					end
 				end
 				
 				love.handlers[e](a, b, c, d)
-				event:fire(e, a, b, c, d)
+				global:fire(e, a, b, c, d)
 			end
 
 			love.timer.step()
@@ -48,7 +49,7 @@ L_love = {
 			if (love.update) then
 				love.update(dt)
 			end
-			event:fire("update", dt)
+			global:fire("update", dt)
 
 			if (love.window.isCreated()) then
 				love.graphics.clear()
@@ -57,7 +58,7 @@ L_love = {
 				if (love.draw) then
 					love.draw()
 				end
-				event:fire("draw")
+				global:fire("draw")
 
 				love.graphics.present()
 			end
@@ -69,7 +70,7 @@ L_love = {
 	hooks = {
 		"load", "quit", "update", "draw",
 		"mousepressed", "mousereleased",
-		"keyboardpressed", "keyboardreleased",
+		"keypressed", "keyreleased",
 		--##todo fill these in from the love site
 	},
 
@@ -93,7 +94,7 @@ L_love = {
 
 			if (not love[value] or overwrite) then
 				love[value] = function(...)
-					event:fire(value, ...)
+					event.global:fire(value, ...)
 				end
 			end
 		end

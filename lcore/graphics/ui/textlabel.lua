@@ -20,8 +20,8 @@ label = oop:class(rectangle)({
 	align = "center",
 	font = nil,
 
-	_new = function(self, new, text, x, y, w, h, align)
-		new = rectangle._new(self, new, x, y, w, h)
+	_new = function(self, new, manager, text, x, y, w, h, align)
+		new = rectangle._new(self, new, manager, x, y, w, h)
 
 		new.font = font:get(h)
 		new.text = text or new.text

@@ -10,9 +10,9 @@
 local L = (...)
 local oop = L:get("utility.oop")
 local event = L:get("service.event")
-local rectdraggable
+local draggable
 
-rectdraggable = oop:class()({
+draggable = oop:class()({
 	sx = 0,
 	sy = 0,
 	smx = 0,
@@ -22,16 +22,18 @@ rectdraggable = oop:class()({
 	dragging = false,
 	buttons = {["l"] = true},
 
-	_new = function(self, new)
-		event:hook("mousepressed", new)
-		event:hook("mousereleased", new)
-		event:hook("update", new)
+	_new = function(self, new, manager)
+		new.manager = manager or new.manager
+
+		new.manager:hook("mousepressed", new)
+		new.manager:hook("mousereleased", new)
+		new.manager:hook("update", new)
 
 		return new
 	end,
 
 	_destroy = function(self)
-		event:unhook(self)
+		self.manager:unhook(self)
 	end,
 
 	mousepressed = function(self, x, y, button)
@@ -72,4 +74,4 @@ rectdraggable = oop:class()({
 	end
 })
 
-return rectdraggable
+return draggable

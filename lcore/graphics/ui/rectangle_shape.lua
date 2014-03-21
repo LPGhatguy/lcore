@@ -16,7 +16,8 @@ rectangle_shape = oop:class(element)({
 	w = 0,
 	h = 0,
 
-	_new = function(self, new, x, y, w, h)
+	_new = function(self, new, manager, x, y, w, h)
+		new.manager = manager or new.manager
 		new.x = x or 0
 		new.y = y or 0
 		new.w = w or 0

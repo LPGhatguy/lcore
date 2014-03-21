@@ -13,14 +13,16 @@ local event = L:get("service.event")
 local button
 
 button = oop:class()({
-	_new = function(self, new)
-		event:hook("mousepressed", new)
+	_new = function(self, new, manager)
+		new.manager = manager or new.manager
+
+		new.manager:hook("mousepressed", new)
 
 		return new
 	end,
 
 	_destroy = function(self)
-		event:unhook(self)
+		self.manager:unhook(self)
 	end,
 
 	mousepressed = function(self, x, y, button)
