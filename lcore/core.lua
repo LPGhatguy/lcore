@@ -7,6 +7,7 @@
 #desc Provides the basis for everything in the framework.
 
 ##todo Allow deprecation/tracing of tables
+##todo More useful method_name inference and file determination
 ]]
 
 if (type(...) ~= "string") then
@@ -92,7 +93,7 @@ L = {
 	warnings_as_errors = false,
 	debug = true,
 
-	path = {root .. ".", ""},
+	path = {root, ""},
 	loaded = {},
 
 	--HIGHER-ORDER METHODS
@@ -175,6 +176,10 @@ L = {
 		local tried = {}
 
 		for index, value in next, self.path do
+			if (value:len() > 0) then
+				value = value .. "."
+			end
+			
 			local path = self:module_to_path(value .. mod)
 
 			if (fs_exists(path)) then
