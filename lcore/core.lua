@@ -1,7 +1,7 @@
 --[[
 #id lcore
 #title LCORE
-#version 0.2.0
+#version 0.3.0
 #status production
 
 #desc Provides the basis for everything in the framework.
@@ -77,8 +77,8 @@ L = {
 	N = N,
 
 	platform = love and "love" or "lua",
-	platform_version = "0.9.0",
-	framework_version = "0.2.0",
+	platform_version = "0.9.1",
+	framework_version = "0.3.0",
 
 	report_level = {
 		default = "warn",
@@ -95,6 +95,7 @@ L = {
 
 	path = {root, ""},
 	loaded = {},
+	metadata = {},
 
 	--HIGHER-ORDER METHODS
 	configure = function(self, settings)
@@ -116,6 +117,10 @@ L = {
 		return info.name
 			or ("@" .. (info.short_src:match("[^/\\]+[\\/][^/\\]+$") or "(unknown file)")
 				.. ":" .. info.linedefined)
+	end,
+
+	base_path = function(self, path)
+		return path and path:match("(.+)%..-$") or root
 	end,
 
 	--ERRORS AND WARNINGS
@@ -218,10 +223,14 @@ L = {
 		local success, chunk = pcall(fs_load, path)
 
 		if (not success or not chunk) then
-			self:error(chunk)
+			return self:error(chunk)
 		end
 
-		local success, object = pcall(chunk, self, ...)
+		local info = {
+			mod_name = mod_name
+		}
+
+		local success, object = pcall(chunk, self, info, ...)
 
 		if (not success) then
 			self:error((mod_name or "unknown module") .. " error: " .. object)
@@ -230,6 +239,7 @@ L = {
 		if (object) then
 			if (mod_name) then
 				self.loaded[mod_name] = object
+				self.metadata[mod_name] = info
 			end
 
 			if (self.autotest) then
