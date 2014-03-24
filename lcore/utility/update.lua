@@ -18,7 +18,7 @@ local L = (...)
 
 local http = require("socket.http")
 local ltn12 = require("ltn12")
-local version = L:get("utility.version")
+local version = L:get("lcore.utility.version")
 local update
 
 update = {

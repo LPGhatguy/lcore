@@ -9,23 +9,23 @@
 ]]
 
 local L = (...)
-local event = L:get("service.event")
+local event = L:get("lcore.service.event")
 local L_love
 
 L_love = {
 	love_run = function()
+		local global = event.global
+		local dt = 0
+
 		love.math.setRandomSeed(os.time())
 		love.event.pump()
 
 		if love.load then
 			love.load(arg)
-			event:fire("load")
 		end
+		global:fire("load")
 
 		love.timer.step()
-
-		local dt = 0
-		local global = event.global
 
 		while (true) do
 			love.event.pump()

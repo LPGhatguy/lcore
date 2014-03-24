@@ -8,9 +8,9 @@
 ]]
 
 local L = (...)
-local oop = L:get("utility.oop")
-local rectangle = L:get("graphics.ui.rectangle")
-local color = L:get("graphics.color")
+local oop = L:get("lcore.utility.oop")
+local rectangle = L:get("lcore.graphics.ui.rectangle")
+local color = L:get("lcore.graphics.color")
 local image
 
 image = oop:class(rectangle)({

@@ -8,7 +8,7 @@
 ]]
 
 local L = (...)
-local color = L:get("graphics.color")
+local color = L:get("lcore.graphics.color")
 local theme
 
 theme = {

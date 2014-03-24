@@ -11,7 +11,7 @@
 ]]
 
 local L = (...)
-local fs = L:get("utility.filesystem")
+local fs = L:get("lcore.utility.filesystem")
 local version
 
 version = {

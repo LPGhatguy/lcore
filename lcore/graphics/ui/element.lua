@@ -8,9 +8,9 @@
 ]]
 
 local L = (...)
-local oop = L:get("utility.oop")
-local gcore = L:get("graphics.core")
-local event = L:get("service.event")
+local oop = L:get("lcore.utility.oop")
+local gcore = L:get("lcore.graphics.core")
+local event = L:get("lcore.service.event")
 local element
 
 element = oop:class()({

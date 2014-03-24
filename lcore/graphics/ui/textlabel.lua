@@ -8,10 +8,10 @@
 ]]
 
 local L = (...)
-local oop = L:get("utility.oop")
-local color = L:get("graphics.color")
-local font = L:get("graphics.font")
-local rectangle = L:get("graphics.ui.rectangle")
+local oop = L:get("lcore.utility.oop")
+local color = L:get("lcore.graphics.color")
+local font = L:get("lcore.graphics.font")
+local rectangle = L:get("lcore.graphics.ui.rectangle")
 local label
 
 label = oop:class(rectangle)({

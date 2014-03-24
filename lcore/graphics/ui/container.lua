@@ -8,9 +8,9 @@
 ]]
 
 local L = (...)
-local oop = L:get("utility.oop")
-local element = L:get("graphics.ui.element")
-local gcore = L:get("graphics.core")
+local oop = L:get("lcore.utility.oop")
+local element = L:get("lcore.graphics.ui.element")
+local gcore = L:get("lcore.graphics.core")
 local container
 
 local child_sorter = function(first, second)

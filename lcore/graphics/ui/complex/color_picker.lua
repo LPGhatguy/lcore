@@ -9,13 +9,13 @@
 ]]
 
 local L = (...)
-local oop = L:get("utility.oop")
-local color = L:get("graphics.color")
-local frame = L:get("graphics.ui.frame")
-local textlabel = L:get("graphics.ui.textlabel")
-local rectangle = L:get("graphics.ui.rectangle")
-local image = L:get("graphics.ui.image")
-local event = L:get("service.event")
+local oop = L:get("lcore.utility.oop")
+local color = L:get("lcore.graphics.color")
+local frame = L:get("lcore.graphics.ui.frame")
+local textlabel = L:get("lcore.graphics.ui.textlabel")
+local rectangle = L:get("lcore.graphics.ui.rectangle")
+local image = L:get("lcore.graphics.ui.image")
+local event = L:get("lcore.service.event")
 local color_picker
 
 --used in both box_picker and line_picker sub-components

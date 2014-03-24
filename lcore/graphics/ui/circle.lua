@@ -8,9 +8,9 @@
 ]]
 
 local L = (...)
-local oop = L:get("utility.oop")
-local color = L:get("graphics.color")
-local circle_shape = L:get("graphics.ui.circle_shape")
+local oop = L:get("lcore.utility.oop")
+local color = L:get("lcore.graphics.color")
+local circle_shape = L:get("lcore.graphics.ui.circle_shape")
 local circle
 
 circle = oop:class(circle_shape)({

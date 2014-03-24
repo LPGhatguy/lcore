@@ -9,7 +9,7 @@
 ]]
 
 local L = (...)
-local oop = L:get("utility.oop")
+local oop = L:get("lcore.utility.oop")
 local event
 
 local function event_sort(first, second)
@@ -98,14 +98,16 @@ event = oop:class()({
 	fire = function(self, event_name, ...)
 		local event = self.events[event_name]
 
-		if (event) then
+		if (event and event.active) then
 			for index = 1, #event do
 				local object = event[index][1]
 
 				if (type(object) == "table") then
 					if (object[event_name]) then
 						object[event_name](object, ...)
-					elseif (object.fire) then
+					end
+
+					if (object.fire) then
 						object:fire(event_name, ...)
 					end
 				elseif (type(object) == "function") then

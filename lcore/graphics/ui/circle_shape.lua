@@ -8,8 +8,8 @@
 ]]
 
 local L = (...)
-local oop = L:get("utility.oop")
-local element = L:get("graphics.ui.element")
+local oop = L:get("lcore.utility.oop")
+local element = L:get("lcore.graphics.ui.element")
 local circle_shape
 
 circle_shape = oop:class(element)({

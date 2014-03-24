@@ -8,9 +8,9 @@
 ]]
 
 local L = (...)
-local oop = L:get("utility.oop")
-local rectangle = L:get("graphics.ui.rectangle")
-local container = L:get("graphics.ui.container")
+local oop = L:get("lcore.utility.oop")
+local rectangle = L:get("lcore.graphics.ui.rectangle")
+local container = L:get("lcore.graphics.ui.container")
 local frame
 
 frame = oop:class(rectangle, container)({

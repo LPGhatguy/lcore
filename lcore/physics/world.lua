@@ -8,7 +8,7 @@
 ]]
 
 local L = (...)
-local oop = L:get("utility.oop")
+local oop = L:get("lcore.utility.oop")
 
 local world
 

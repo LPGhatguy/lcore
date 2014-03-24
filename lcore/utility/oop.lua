@@ -11,7 +11,7 @@
 
 local L = (...)
 
-local utable = L:get("utility.table")
+local utable = L:get("lcore.utility.table")
 local oop
 
 --Checks an argument for whether it's a type or a type identifier

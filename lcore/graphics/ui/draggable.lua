@@ -8,8 +8,8 @@
 ]]
 
 local L = (...)
-local oop = L:get("utility.oop")
-local event = L:get("service.event")
+local oop = L:get("lcore.utility.oop")
+local event = L:get("lcore.service.event")
 local draggable
 
 draggable = oop:class()({
