@@ -1,13 +1,13 @@
---[[
-#id debug.core
-#title Debug Core
-#status incomplete
-#version 0.1
+local L, this = ...
+this.title = "Debug Core"
+this.version = "0.1"
+this.status = "incomplete"
+this.desc = "Provides debug utility methods for debugging and profiling projects."
+this.todo = {
+	"Better emulate L:load in dir_success.",
+	"Consider using the traditional module format instead of directories."
+}
 
-#desc Provides utility and plugin methods for debugging projects
-]]
-
-local L = (...)
 local core
 
 local function report(verbose, ...)
@@ -34,7 +34,7 @@ core = {
 						if (compile_only) then
 							print("COMPILE", "SUCCESS", path)
 						else
-							local good, fail = pcall(chunk, L)
+							local good, fail = pcall(chunk, L, {})
 							if (good) then
 								report(verbose, "RUNTIME" .. " SUCCESS: " .. path)
 							else

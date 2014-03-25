@@ -1,18 +1,11 @@
---[[
-#id type.serialize
-#title Data Serializer
-
-#version 1.0
-#status incomplete
-
-##todo static type methods
-##todo serialize method
-##todo deserialize method
-
-#desc A serialization library with dense type packing.
-]]
-
-local L = (...)
+local L, this = ...
+this.title = "Data Serializer"
+this.version = "0.1"
+this.status = "prototype"
+this.desc = "Provides data serialization and dense packing of objects."
+this.todo = {
+	"Complete rewrite."
+}
 
 local serialize
 

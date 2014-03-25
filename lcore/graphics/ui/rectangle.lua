@@ -1,13 +1,9 @@
---[[
-#id graphics.ui.rectangle
-#title UI rectangle
-#status production
-#version 1.0
+local L, this = ...
+this.title = "UI Rectangle"
+this.version = "1.0"
+this.status = "production"
+this.desc = "A rectangle with a border."
 
-#desc A rectangle with a border
-]]
-
-local L = (...)
 local oop = L:get("lcore.utility.oop")
 local rectangle_shape = L:get("lcore.graphics.ui.rectangle_shape")
 local color = L:get("lcore.graphics.color")

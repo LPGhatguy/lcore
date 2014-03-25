@@ -1,13 +1,12 @@
---[[
-#id graphics.font
-#title Font Core
-#status needs-testing
-#version 1.0
+local L, this = ...
+this.title = "Font Core"
+this.version = "1.0"
+this.status = "production"
+this.desc = "Provides an efficient interface into using multiple font faces and sizes."
+this.todo = {
+	"Work into lcore.service.content's featureset."
+}
 
-#desc Provides fonts and reduces memory footprint when using multiple fonts.
-]]
-
-local L = (...)
 local font
 
 font = {

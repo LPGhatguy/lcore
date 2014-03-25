@@ -1,13 +1,9 @@
---[[
-#id debug.stopwatch
-#title Stopwatch Code Benchmarker
-#status production
-#version 1.0
+local L, this = ...
+this.title = "Stopwatch Profiler"
+this.version = "1.0"
+this.status = "production"
+this.desc = "Benchmarks code using a logged timer"
 
-#desc Benchmarks code for profiling of tasks
-]]
-
-local L = (...)
 local stopwatch
 
 stopwatch = {

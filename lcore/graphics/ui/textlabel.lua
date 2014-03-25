@@ -1,13 +1,12 @@
---[[
-#id graphics.ui.textlabel
-#title UI Text Label
-#status production
-#version 1.0
+local L, this = ...
+this.title = "UI Text Label"
+this.version = "1.0"
+this.status = "production"
+this.desc = "Draws text with a rectangular background."
+this.todo = {
+	"Decouple this and lcore.ui.rectangle to provide a 'text_shape' class."
+}
 
-#desc Draws plaintext with a single style to the screen.
-]]
-
-local L = (...)
 local oop = L:get("lcore.utility.oop")
 local color = L:get("lcore.graphics.color")
 local font = L:get("lcore.graphics.font")

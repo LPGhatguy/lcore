@@ -1,13 +1,9 @@
---[[
-#id graphics.ui.frame
-#title UI Frame
-#status needs-testing
-#version 1.0
+local L, this = ...
+this.title = "UI Frame"
+this.version = "1.0"
+this.status = "production"
+this.desc = "Contains other UI elements and draws a rectangle behind them."
 
-#desc Contains other UI elements and controls their draw region
-]]
-
-local L = (...)
 local oop = L:get("lcore.utility.oop")
 local rectangle = L:get("lcore.graphics.ui.rectangle")
 local container = L:get("lcore.graphics.ui.container")

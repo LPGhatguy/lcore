@@ -1,13 +1,9 @@
---[[
-#id graphics.ui.container
-#title UI Container
-#status production
-#version 1.1
+local L, this = ...
+this.title = "UI Container"
+this.version = "1.1"
+this.status = "production"
+this.desc = "Holds other UI items and passes draw calls to them."
 
-#desc Holds other UI objects so they can work their magic.
-]]
-
-local L = (...)
 local oop = L:get("lcore.utility.oop")
 local element = L:get("lcore.graphics.ui.element")
 local gcore = L:get("lcore.graphics.core")

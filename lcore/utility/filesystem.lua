@@ -1,16 +1,14 @@
---[[
-#id utility.filesystem
-#title Filesystem Wrapper
-#version 1.0
-#staus incomplete
+local L, this = ...
+this.title = "Filesystem Wrapper"
+this.version = "1.0"
+this.status = "incomplete"
+this.desc = "Wraps I/O procedures to bring APIs together"
+this.notes = {
+	[[ The vanilla/LFS implementation of 'list' is less efficient than the love one.
+		The 'iterate' method has more predictable performance.
+	]],
+}
 
-#desc Wraps I/O procedures to bring APIs together
-
-#note The vanilla/LFS implementation of 'list' is less efficient than the love one.
-#note 'iterate' has more predictable performance.
-]]
-
-local L = (...)
 local lfs_enabled, lfs = pcall(require, "lfs")
 local fs = {}
 local fs_interface = {}

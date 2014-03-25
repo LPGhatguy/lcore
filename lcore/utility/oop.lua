@@ -1,15 +1,11 @@
---[[
-#id utility.oop
-#title OOP Interface
-#version 1.3
-#status production
-
-#desc Provides object orientation to the framework.
-
-##todo Look into optimizing oop.mix using mutable functable objects
-]]
-
-local L = (...)
+local L, this = ...
+this.title = "Object Orientation Provider"
+this.version = "1.3"
+this.status = "production"
+this.desc = "Provides advanced object orientation capabilities."
+this.todo = {
+	"Look into optimizing oop.mix using mutable functable objects."
+}
 
 local utable = L:get("lcore.utility.table")
 local oop

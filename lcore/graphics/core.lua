@@ -1,13 +1,9 @@
---[[
-#id graphics.core
-#title Graphics Core
-#version 1.0
-#status production
+local L, this = ...
+this.title = "Graphics Core"
+this.version = "1.0"
+this.status = "production"
+this.desc = "Provides core graphics methods for global interaction between graphics components."
 
-#desc Provides graphics methods and procedures for the rest of the framework.
-]]
-
-local L = (...)
 local core
 
 core = {

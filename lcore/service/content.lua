@@ -1,16 +1,14 @@
---[[
-#id service.content
-#title Content Service
-#status prototype
-#version 0.1
+local L, this = ...
+this.title = "Content Service"
+this.version = "0.1"
+this.status = "prototype"
+this.desc = "Provides content loading/unloading for the engine."
+this.todo = {
+	"Review directory management.",
+	"Auto-alias directories and provide content discovery.",
+	"Provide automatic content unloading using manual reference counting."
+}
 
-#desc Provides content loading/unloading for the engine
-
-##todo Auto-alias directories and provide content discovery
-##todo Provide reference counting or such to automatically unload content
-]]
-
-local L = (...)
 local fs = L:get("lcore.utility.filesystem")
 local content
 local load_assoc_meta

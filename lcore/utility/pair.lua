@@ -1,15 +1,9 @@
---[[
-#id utility.pair
-#title Vector Pair Library
-
-#version 1.0
-#status production
-#see utility.vector2
-
-#desc Provides vector pair (duple) methods and manipulations
-]]
-
-local L = (...)
+local L, this = ...
+this.title = "Vector Pair Library"
+this.version = "1.0"
+this.status = "production"
+this.see = {"lcore.utility.vector2"}
+this.desc = "Provides vector and duple methods."
 
 local pair
 

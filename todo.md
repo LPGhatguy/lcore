@@ -1,6 +1,7 @@
 #TODO
 - Make some form of templates! (container object like graphics.color and graphics.theme)
 - UI element resize method/event
+- Rebuild documentation based on the new documentation engine
 
 # Complete(ish) Features
 - Profiling (debug.stopwatch)
@@ -24,9 +25,9 @@
 - Debug facilities (debug)
 - Physics wrapper (physics)
 - Math assistance (utility.math)
+- Platform semi-agnosticism (platform)
 
 # Future Features
-- Platform semi-agnosticism (platform)
 - Static-typing utilities (type)
 - Network manager (service.network)
 - Localization (service.locale)

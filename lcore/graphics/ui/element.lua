@@ -1,13 +1,9 @@
---[[
-#id graphics.ui.element
-#title Element Superclass
-#status production
-#version 1.1
+local L, this = ...
+this.title = "UI Element"
+this.version = "1.1"
+this.status = "production"
+this.desc = "The root element of all UI elements in LCORE"
 
-#desc The mother of all UI elements.
-]]
-
-local L = (...)
 local oop = L:get("lcore.utility.oop")
 local gcore = L:get("lcore.graphics.core")
 local event = L:get("lcore.service.event")

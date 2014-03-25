@@ -1,13 +1,15 @@
---[[
-#id graphics.theme
-#title Theme Engine
-#status prototype
-#version 0.1
+local L, this = ...
+this.title = "Theme Engine"
+this.version = "0.1"
+this.status = "prototype"
+this.desc = "Provides theming for lcore.graphics.ui.* elements."
+this.notes = {
+	"Presently may not function correctly."
+}
+this.todo = {
+	"Evaluate the need for this module and possibly integrate into lcore.service.content."
+}
 
-#desc Provides engine theming.
-]]
-
-local L = (...)
 local color = L:get("lcore.graphics.color")
 local theme
 

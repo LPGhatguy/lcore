@@ -1,17 +1,11 @@
---[[
-#id type.static
-#title Static Typer
-
-#version 1.0
-#status incomplete
-
-##todo Partial specification support in build_spec
-##todo Unpack method
-
-#desc Provides static type checks, specifications, and packing.
-]]
-
-local L = (...)
+local L, this = ...
+this.title = "Static Typing"
+this.version = "1.0"
+this.status = "incomplete"
+this.desc = "Provides static typing procedures like verification, specification, and packing."
+this.todo = {
+	"Perform rewrite."
+}
 
 local static
 

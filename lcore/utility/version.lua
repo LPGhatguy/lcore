@@ -1,16 +1,12 @@
---[[
-#id utility.version
-#title Application Version Library
+local L, this = ...
+this.title = "Application Version Library"
+this.version = "1.0"
+this.status = "incomplete"
+this.desc = "Handles application versioning."
+this.todo = {
+	"Fix version comparison method."
+}
 
-#version 1.0
-#status incomplete
-
-##todo Make version comparison better
-
-#desc Handles application versions including reading and writing them to files
-]]
-
-local L = (...)
 local fs = L:get("lcore.utility.filesystem")
 local version
 

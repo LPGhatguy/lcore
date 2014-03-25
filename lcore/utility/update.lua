@@ -1,20 +1,11 @@
---[[
-#id utility.update
-#title Update Manager
-
-##depends luasocket
-##depends love
-##depends utility.version
-
-#version 1.0
-#status incomplete
-
-##todo non-blocking network requests
-
-#desc Retrieves updates from a webserver and applies them!
-]]
-
-local L = (...)
+local L, this = ...
+this.title = "Update Manager"
+this.version = "1.0"
+this.status = "prototype"
+this.desc = "Retrieves updates from a web server and applies them to the client."
+this.todo = {
+	"Create non-blocking network requests."
+}
 
 local http = require("socket.http")
 local ltn12 = require("ltn12")

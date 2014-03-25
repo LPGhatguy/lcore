@@ -1,14 +1,9 @@
---[[
-#id service.event
-#title Event Service
+local L, this = ...
+this.title = "Event Service"
+this.version = "1.1"
+this.status = "production"
+this.desc = "Provides event support with both manager instantiation and global events."
 
-#status needs-testing
-#version 1.1
-
-#desc Provides global event support and manager instancing
-]]
-
-local L = (...)
 local oop = L:get("lcore.utility.oop")
 local event
 

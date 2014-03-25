@@ -7,7 +7,12 @@
 #desc Enables draggable functionality.
 ]]
 
-local L = (...)
+local L, this = ...
+this.title = "Draggable UI Item"
+this.version = "1.1"
+this.status = "production"
+this.desc = "Enables draggable functionality in other UI elements."
+
 local oop = L:get("lcore.utility.oop")
 local event = L:get("lcore.service.event")
 local draggable

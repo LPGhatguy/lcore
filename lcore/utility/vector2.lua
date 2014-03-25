@@ -9,7 +9,12 @@
 #desc Provides vector2 methods and manipulations
 ]]
 
-local L = (...)
+local L, this = ...
+this.title = "2D Vector Library"
+this.version = "1.0"
+this.status = "needs-testing"
+this.see = {"lcore.utility.pair"}
+this.desc = "Provides 2D vector operations."
 
 local vector2
 

@@ -1,13 +1,9 @@
---[[
-#id graphics.ui.image
-#title UI image
-#status production
-#version 1.0
+local L, this = ...
+this.title = "UI Image"
+this.version = "1.0"
+this.status = "production"
+this.desc = "Draws an image with an optional background and border."
 
-#desc An image
-]]
-
-local L = (...)
 local oop = L:get("lcore.utility.oop")
 local rectangle = L:get("lcore.graphics.ui.rectangle")
 local color = L:get("lcore.graphics.color")

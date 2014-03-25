@@ -1,14 +1,8 @@
---[[
-#id utility.table
-#title Table Extension Library
-
-#version 1.0
-#status production
-
-#desc Provides extensions for operating on tables that Lua doesn't have by default.
-]]
-
-local L = (...)
+local L, this = ...
+this.title = "Table Extension Library"
+this.version = "1.0"
+this.status = "production"
+this.desc = "Provides extensions for operating on tables."
 
 local utable
 local test

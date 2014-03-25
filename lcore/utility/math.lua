@@ -1,13 +1,9 @@
---[[
-#id utility.math
-#title Math Utilities
-#version 0.1
-#status incomplete
+local L, this = ...
+this.title = "Math Utilities"
+this.version = "0.1"
+this.status = "incomplete"
+this.desc = "Provides extended mathematical operations."
 
-#desc Provides extended mathematical operations
-]]
-
-local L = (...)
 local umath
 
 umath = {

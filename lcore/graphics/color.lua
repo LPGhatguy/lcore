@@ -7,7 +7,12 @@
 #desc Lists named colors and provides color manipulation functions.
 ]]
 
-local L = (...)
+local L, this = ...
+this.title = "Color Core"
+this.version = "1.0"
+this.status = "production"
+this.desc = "Lists named colors and provides color manipulation functions."
+
 local color
 
 color = {

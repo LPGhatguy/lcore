@@ -1,13 +1,9 @@
---[[
-#id graphics.ui.circle
-#title UI Circle
-#status production
-#version 1.0
+local L, this = ...
+this.title = "Circle"
+this.version = "1.0"
+this.status = "production"
+this.desc = "A UI circle element with a border."
 
-#desc A circle with a border
-]]
-
-local L = (...)
 local oop = L:get("lcore.utility.oop")
 local color = L:get("lcore.graphics.color")
 local circle_shape = L:get("lcore.graphics.ui.circle_shape")

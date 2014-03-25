@@ -1,13 +1,9 @@
---[[
-#id graphics.ui.button
-#title Button Superclass
-#status needs-testing
-#version 1.0
+local L, this = ...
+this.title = "UI Button Superclass"
+this.status = "production"
+this.version = "1.0"
+this.desc = "Provides button functionality and event hooking for any UI element."
 
-#desc Provides the basis for buttons via clever wiring.
-]]
-
-local L = (...)
 local oop = L:get("lcore.utility.oop")
 local event = L:get("lcore.service.event")
 local button

@@ -1,14 +1,12 @@
---[[
-#id platform.love
-#title LOVE platform assistance
-#version 1.0
-#status incomplete
+local L, this = ...
+this.title = "LOVE Platform Assistance"
+this.version = "1.0"
+this.status = "production"
+this.desc = "Provides useful interfaces for integrating LCORE into LOVE."
+this.notes = {
+	"Do not use provide_hooks and provide_loop at the same time or double event calls will occur."
+}
 
-#desc Provides interfaces to LCORE designed for LOVE.
-#desc Do not use provide_hooks and provide_loop at the same time, ever.
-]]
-
-local L = (...)
 local event = L:get("lcore.service.event")
 local L_love
 

@@ -1,13 +1,9 @@
---[[
-#id physics.world
-#title Physics World
-#status prototype
-#version 0.1
+local L, this = ...
+this.title = "Physics World"
+this.version = "0.1"
+this.status = "prototype"
+this.desc = "Contains all physically simulated objects."
 
-#desc Contains anything that would be in a physically simulated world.
-]]
-
-local L = (...)
 local oop = L:get("lcore.utility.oop")
 
 local world

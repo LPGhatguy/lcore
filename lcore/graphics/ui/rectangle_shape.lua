@@ -1,13 +1,9 @@
---[[
-#id graphics.ui.rectangle_shape
-#title UI Rectangle Superclass
-#status production
-#version 1.0
+local L, this = ...
+this.title = "UI Rectangle Shape"
+this.version = "1.0"
+this.status = "production"
+this.desc = "Provides facilities identifying a UI element as a rectangle. Does not provide rendering."
 
-#desc The mother of all rectangular UI elements.
-]]
-
-local L = (...)
 local oop = L:get("lcore.utility.oop")
 local element = L:get("lcore.graphics.ui.element")
 local rectangle_shape

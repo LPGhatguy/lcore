@@ -1,18 +1,12 @@
---[[
-#id graphics.ui.complex.color_picker
-#title Color Picker
-#status incomplete
-#version 1.0
+local L, this = ...
+this.title = "UI Color Picker"
+this.version = "1.0"
+this.status = "production"
+this.desc = "A simple HSV color picker"
 
-#desc A simple HSV color picker
-##todo Display current value numerically
-]]
-
-local L = (...)
 local oop = L:get("lcore.utility.oop")
 local color = L:get("lcore.graphics.color")
 local frame = L:get("lcore.graphics.ui.frame")
-local textlabel = L:get("lcore.graphics.ui.textlabel")
 local rectangle = L:get("lcore.graphics.ui.rectangle")
 local image = L:get("lcore.graphics.ui.image")
 local event = L:get("lcore.service.event")

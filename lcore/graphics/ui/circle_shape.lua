@@ -1,13 +1,9 @@
---[[
-#id graphics.ui.circle_shape
-#title UI Circle Superclass
-#status incomplete
-#version 0.1
+local L, this = ...
+this.title = "UI Circle Shape"
+this.version = "1.0"
+this.status = "production"
+this.desc = "Provides methods identifying this UI element as a circle. Does not provide rendering."
 
-#desc The father of all circular UI elements
-]]
-
-local L = (...)
 local oop = L:get("lcore.utility.oop")
 local element = L:get("lcore.graphics.ui.element")
 local circle_shape
