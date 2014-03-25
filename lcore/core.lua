@@ -1,15 +1,16 @@
---[[
-#id lcore
-#title LCORE
-#version 0.4.0
-#status production
+local this = {
+	title = "LCORE",
+	version = "0.5.0",
+	status = "production",
 
-#desc Provides the basis for everything in the framework.
+	desc = "Provides the basis for LCORE and all its modules.",
 
-##todo Allow deprecation/tracing of tables
-##todo More useful method_name inference and file determination
-##todo Deal with synonym paths causing module duplication
-]]
+	todo = {
+		"Allow deprecation and tracing of tables and other properties.",
+		"Improve method_name's inference.",
+		"Look into fixing loop complexify of L:get"
+	}
+}
 
 if (type(...) ~= "string") then
 	return
@@ -76,6 +77,7 @@ N = {
 
 L = {
 	N = N,
+	info = this,
 
 	platform = love and "love" or "lua",
 	platform_version = "0.9.1",
@@ -94,7 +96,7 @@ L = {
 	warnings_as_errors = false,
 	debug = true,
 
-	path = {""},
+	path = {},
 	loaded = {},
 	metadata = {},
 
@@ -181,22 +183,27 @@ L = {
 	get_path = function(self, mod)
 		local tried = {}
 
+		local root_path = self:module_to_path(mod)
+
+		if (fs_exists(root_path)) then
+			self:report("module_found", "Module found in " .. root_path)
+			return root_path
+		else
+			table.insert(tried, root_path)
+		end
+
 		for index, value in next, self.path do
-			if (value:len() > 0) then
-				value = value .. "."
-			end
-			
-			local path = self:module_to_path(value .. mod)
+			local path = self:module_to_path(value .. "." .. mod)
 
 			if (fs_exists(path)) then
 				self:report("module_found", "Module found in " .. path)
-				return path
+				return path, value
 			else
 				table.insert(tried, path)
 			end
 		end
 
-		return nil, tried
+		return nil, nil, tried
 	end,
 
 	add_path = function(self, path)
@@ -209,10 +216,18 @@ L = {
 		if (self.loaded[mod_name]) then
 			return self.loaded[mod_name]
 		else
-			local path, attempts = self:get_path(mod_name)
+			for index, path in ipairs(self.path) do
+				local full_name = path .. mod_name
+
+				if (self.loaded[full_name]) then
+					return self.loaded[full_name]
+				end
+			end
+
+			local path, root, attempts = self:get_path(mod_name)
 
 			if (path) then
-				return self:load(mod_name, path, ...)
+				return self:load((root and root .. "." or "") .. mod_name, path, ...)
 			else
 				self:error("Couldn't find module '" .. mod_name .. "'"
 					.. "\n\nPaths tried:\n" .. table.concat(attempts, "\n"))
