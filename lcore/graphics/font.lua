@@ -10,9 +10,12 @@ this.todo = {
 local font
 
 font = {
+	default_face = nil,
+	default_scaling = {"linear", "linear"},
 	loaded = {},
 
 	get = function(self, size, name)
+		name = name or self.default_face
 		local rname = name or "default"
 		local lfont
 
@@ -29,6 +32,7 @@ font = {
 				lfont = love.graphics.newFont(size)
 			end
 
+			lfont:setFilter(unpack(self.default_scaling))
 			self.loaded[rname][size] = lfont
 		end
 
