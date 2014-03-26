@@ -1,12 +1,3 @@
---[[
-#id graphics.ui.draggable
-#title Draggable Superclass
-#status production
-#version 1.1
-
-#desc Enables draggable functionality.
-]]
-
 local L, this = ...
 this.title = "Draggable UI Item"
 this.version = "1.1"

@@ -1,12 +1,3 @@
---[[
-#id graphics.color
-#title Color Core
-#status production
-#version 1.0
-
-#desc Lists named colors and provides color manipulation functions.
-]]
-
 local L, this = ...
 this.title = "Color Core"
 this.version = "1.0"

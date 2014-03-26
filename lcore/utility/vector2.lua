@@ -1,14 +1,3 @@
---[[
-#id utility.vector2
-#title Vector2 Library
-
-#version 1.0
-#status needs-testing
-#see utility.pair
-
-#desc Provides vector2 methods and manipulations
-]]
-
 local L, this = ...
 this.title = "2D Vector Library"
 this.version = "1.0"
