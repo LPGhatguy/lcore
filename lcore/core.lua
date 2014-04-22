@@ -16,7 +16,7 @@ if (type(...) ~= "string") then
 	return
 end
 
-local root = (...):match("(.+)%..-$") or (...)
+local root = (...):match("(.+)%..-%..-$")
 
 local N
 local L
@@ -96,7 +96,7 @@ L = {
 	warnings_as_errors = false,
 	debug = true,
 
-	path = {},
+	path = {root},
 	loaded = {},
 	metadata = {},
 
