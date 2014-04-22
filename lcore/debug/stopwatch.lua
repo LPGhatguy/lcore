@@ -5,6 +5,7 @@ this.status = "production"
 this.desc = "Benchmarks code using a logged timer"
 
 local stopwatch
+local get_time = love and love.timer.getTime or os.clock
 
 stopwatch = {
 	tasks = {},
@@ -16,13 +17,13 @@ stopwatch = {
 			self.tasks[name] = task
 		end
 
-		task.begin = love.timer.getTime()
+		task.begin = get_time()
 		task.finish = nil
 	end,
 
 	finish = function(self, name)
 		if (self.tasks[name]) then
-			self.tasks[name].finish = love.timer.getTime()
+			self.tasks[name].finish = get_time()
 		end
 	end,
 
