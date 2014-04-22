@@ -1,6 +1,6 @@
 local L, this = ...
 this.title = "Event Service"
-this.version = "1.1"
+this.version = "1.2"
 this.status = "production"
 this.desc = "Provides event support with both manager instantiation and global events."
 
@@ -20,6 +20,7 @@ end
 event = oop:class()({
 	__nocopy = true,
 	global = nil,
+	registered = {},
 	events = {},
 
 	hook = function(self, event_name, object, priority, ...)
@@ -41,23 +42,31 @@ event = oop:class()({
 			}
 
 			self.events[event_name] = target
+			self.registered[event_name] = {}
 		end
 
-		table.insert(target, {object, priority})
+		if (self.registered[event_name][object]) then
+			return false, "Object already registered with event."
+		end
+
+		local event = {object, priority}
+
+		table.insert(target, event)
+		self.registered[event_name][object] = event
 
 		return true
 	end,
 
 	unhook_object = function(self, object, event_name)
 		if (not event_name) then
-			for key, value in pairs(self.hooks) do
+			for key, value in pairs(self.events) do
 				self:unhook_object(object, key)
 			end
 
 			return true
 		end
 
-		local event = self.hooks[event_name]
+		local event = self.events[event_name]
 
 		if (event) then
 			for index = 1, #event do
@@ -66,12 +75,15 @@ event = oop:class()({
 				end
 			end
 
+			self.registered[event_name][object] = nil
+
 			self:sort(event_name)
 		end
 	end,
 
 	unhook_event = function(self, event_name)
 		self.events[event_name] = nil
+		self.registered[event_name] = nil
 	end,
 
 	sort = function(self, event_name)
