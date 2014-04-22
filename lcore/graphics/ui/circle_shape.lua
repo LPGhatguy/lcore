@@ -12,10 +12,8 @@ circle_shape = oop:class(element)({
 	r = 0,
 
 	_new = function(self, new, manager, x, y, r)
-		new.manager = manager or new.manager
-		new.x = x or 0
-		new.y = y or 0
-		new.r = r or 0
+		new = element._new(self, new, manager, x, y)
+		new.r = r or new.r
 
 		return new
 	end,

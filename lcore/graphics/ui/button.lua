@@ -8,17 +8,9 @@ local oop = L:get("lcore.utility.oop")
 local event = L:get("lcore.service.event")
 local button
 
-button = oop:class()({
-	_new = function(self, new, manager)
-		new.manager = manager or new.manager
-
-		new.manager:hook("mousepressed", new)
-
-		return new
-	end,
-
-	_destroy = function(self)
-		self.manager:unhook(self)
+button = oop:class(element)({
+	_connect = function(self, manager)
+		manager:hook("mousepressed", self)
 	end,
 
 	mousepressed = function(self, x, y, button)

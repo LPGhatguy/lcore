@@ -112,7 +112,7 @@ color_picker = oop:class(frame)({
 		new:redraw_line()
 		new:recompute_value()
 
-		new.manager:hook({"mousepressed", "mousereleased", "update"}, new)
+		new.child_manager:hook({"mousepressed", "mousereleased", "update"}, new)
 
 		return new
 	end,

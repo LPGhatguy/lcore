@@ -10,7 +10,7 @@ local event = L:get("lcore.service.event")
 local element
 
 element = oop:class()({
-	manager = event.global,
+	manager = nil,
 	x = 0,
 	y = 0,
 	z = 0,
@@ -19,10 +19,33 @@ element = oop:class()({
 
 	_new = function(self, new, manager, x, y)
 		new.manager = manager or new.manager
-		new.x = x or 0
-		new.y = y or 0
+		new.x = x or new.x
+		new.y = y or new.y
+
+		new:connect(manager)
 
 		return new
+	end,
+
+	_destroy = function(self)
+		self:connect()
+	end,
+
+	_connect = function(self, manager)
+		manager:hook("draw", self)
+	end,
+
+	connect = function(self, manager)
+		if (self.manager) then
+			self.manager:unhook_object(self)
+		end
+
+		self.manager = manager
+
+		if (manager) then
+			self.manager = manager
+			self:_connect(manager)
+		end
 	end,
 
 	draw = function(self)

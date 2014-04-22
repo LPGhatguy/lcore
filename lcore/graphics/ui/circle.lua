@@ -14,14 +14,6 @@ circle = oop:class(circle_shape)({
 	border_color = color:get("silver"),
 	border_width = 2,
 
-	_new = function(self, new, x, y, r)
-		new.x = x or 0
-		new.y = y or 0
-		new.r = r or 0
-
-		return new
-	end,
-
 	draw = function(self)
 		circle_shape.draw(self)
 

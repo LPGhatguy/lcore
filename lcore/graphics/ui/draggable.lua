@@ -18,14 +18,8 @@ draggable = oop:class()({
 	dragging = false,
 	buttons = {["l"] = true},
 
-	_new = function(self, new, manager)
-		new.manager = manager or new.manager
-
-		new.manager:hook("mousepressed", new)
-		new.manager:hook("mousereleased", new)
-		new.manager:hook("update", new)
-
-		return new
+	_connect = function(self, manager)
+		manager:hook({"mousepressed", "mousereleased", "update"}, self)
 	end,
 
 	_destroy = function(self)

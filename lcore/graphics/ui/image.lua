@@ -13,12 +13,8 @@ image = oop:class(rectangle)({
 	image = nil,
 
 	_new = function(self, new, manager, image, x, y, w, h)
-		new.manager = manager or new.manager
+		new = rectangle._new(self, new, manager, x, y, w, h)
 		new.image = image
-		new.x = x or 0
-		new.y = y or 0
-		new.w = w
-		new.h = h
 
 		return new
 	end,
