@@ -40,6 +40,7 @@ oop = {
 	mix = function(self, ...)
 		local result = {}
 		local mixing = {}
+		local imixing = {}
 		local args = {...}
 
 		for key, value in pairs(args) do
@@ -53,8 +54,12 @@ oop = {
 				if (typed == "function") then
 					if (not mixing[key]) then
 						mixing[key] = {value}
+						imixing[value] = true
 					else
-						table.insert(mixing[key], value)
+						if (not imixing[value]) then
+							imixing[value] = true
+							table.insert(mixing[key], value)
+						end
 					end
 				elseif (not result[key]) then
 					if (typed == "table") then
@@ -69,13 +74,13 @@ oop = {
 		for key, value in pairs(mixing) do
 			if (#value > 1) then
 				result[key] = function(...)
-					local result
+					local result = {}
 
-					for index, functor in pairs(value) do
+					for index, functor in ipairs(value) do
 						result = {functor(...)}
 					end
 
-					return result and unpack(result)
+					return unpack(result)
 				end
 			else
 				result[key] = value[1]
