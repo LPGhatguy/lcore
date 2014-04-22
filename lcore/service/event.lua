@@ -57,6 +57,12 @@ event = oop:class()({
 		return true
 	end,
 
+	batch_hook = function(self, event_name, objects, priority, ...)
+		for index, object in ipairs(objects) do
+			self:hook(event_name, object, priority, ...)
+		end
+	end,
+
 	unhook_object = function(self, object, event_name)
 		if (not event_name) then
 			for key, value in pairs(self.events) do
