@@ -118,9 +118,7 @@ event = oop:class()({
 				if (type(object) == "table") then
 					if (object[event_name]) then
 						object[event_name](object, ...)
-					end
-
-					if (object.fire) then
+					elseif (object.fire) then
 						object:fire(event_name, ...)
 					end
 				elseif (type(object) == "function") then
