@@ -60,7 +60,6 @@ local function line_draw(self)
 end
 
 color_picker = oop:class(frame)({
-	child_manager = event:new(),
 	hsv = {0, 0, 0, 255},
 	rgb = {0, 0, 0, 255},
 
@@ -71,8 +70,8 @@ color_picker = oop:class(frame)({
 	numerics_box = nil,
 
 	_new = function(self, new, manager, x, y, w, h)
-		new = rectangle._new(self, new, manager, x, y, w, h)
-		local child_manager = new.child_manager
+		new = frame._new(self, new, manager, x, y, w, h)
+		local child_manager = event:new()
 
 		new.box_picker = image:new(child_manager, nil, 0, 0, w - 100, h)
 		new.box_picker.image_data = love.image.newImageData(new.box_picker.w, new.box_picker.h)
@@ -112,22 +111,27 @@ color_picker = oop:class(frame)({
 		new:redraw_line()
 		new:recompute_value()
 
-		new.child_manager:hook({"mousepressed", "mousereleased", "update"}, new)
+		new.child_manager = child_manager
+		new.manager:hook({"draw"}, new)
 
 		return new
 	end,
 
-	_destroy = function(self)
-		self.manager:unhook_object(self)
+	_connect = function(self, manager)
+		manager:hook({"mousepressed", "mousereleased", "update"}, self)
 	end,
 
-	mousepressed = function(self, ...)
+	_destroy = function(self)
+		self:connect()
+	end,
+
+	--[[mousepressed = function(self, ...)
 		self:fire("mousepressed", ...)
 	end,
 
 	mousereleased = function(self, ...)
 		self:fire("mousereleased", ...)
-	end,
+	end,]]
 
 	update = function(self, delta)
 		local mx, my = love.mouse.getPosition()
