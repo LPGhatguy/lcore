@@ -85,14 +85,10 @@ oop = {
 		return result
 	end,
 
-	--/@class object
-	--documentation doesn't work with non-method member items
 	object = {
 		inherit = function(self, ...)
-			local args = {...}
-
-			for key = 1, #args do
-				utable:merge(resolve(args[key]), self)
+			for key, item in ipairs({...}) do
+				utable:merge(resolve(item), self)
 			end
 
 			return self
@@ -113,8 +109,6 @@ oop = {
 		destroy = function(self, ...)
 			if (self._destroy) then
 				return self:_destroy(...)
-			else
-				return true
 			end
 		end
 	}
