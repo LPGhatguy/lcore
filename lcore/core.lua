@@ -1,6 +1,6 @@
 local this = {
 	title = "LCORE",
-	version = "0.6.0",
+	version = "0.7.0",
 	status = "production",
 
 	desc = "Provides the basis for LCORE and all its modules.",
@@ -22,7 +22,7 @@ local N
 local L
 
 local fs_exists = function(path)
-	if (L.platform == "love") then
+	if (L.__internal_platform == "love") then
 		return love.filesystem.exists(path)
 	else
 		local handle, err = io.open(path, "r")
@@ -37,7 +37,7 @@ local fs_exists = function(path)
 end
 
 local fs_load = function(path)
-	if (L.platform == "love") then
+	if (L.__internal_platform == "love") then
 		return love.filesystem.load(path)
 	else
 		return loadfile(path)
@@ -72,16 +72,28 @@ N = {
 			method(...)
 			return target(...)
 		end
+	end,
+
+	compose = function(target, method)
+		return function(...)
+			return target(method(...))
+		end
+	end,
+
+	compose_method = function(target, method)
+		return function(self, ...)
+			return target(self, method(self, ...))
+		end
 	end
 }
 
 L = {
+	__internal_platform = love and "love" or "vanilla",
+
 	N = N,
 	info = this,
 
-	platform = love and "love" or "lua",
-	platform_version = "0.9.1",
-	framework_version = "0.4.0",
+	version = this.version,
 
 	report_level = {
 		default = "warn",
@@ -126,6 +138,22 @@ L = {
 		return path and path:match("(.+)%..-$") or root
 	end,
 
+	--calls a method and ignores any lcore errors
+	safe_call = function(self, method, ...)
+		local errors_reported = self.errors_reported
+		local warnings_as_errors = self.warnings_as_errors
+
+		self.errors_reported = false
+		self.warnings_as_errors = false
+
+		local result = {method(...)}
+
+		self.errors_reported = errors_reported
+		self.warnings_as_errors = warnings_as_errors
+
+		return unpack(result)
+	end,
+
 	--ERRORS AND WARNINGS
 	report = function(self, id, message)
 		message = message or "(no message)"
@@ -145,7 +173,7 @@ L = {
 			if (default) then
 				default(self, message)
 			else
-				self:error("Couldn't find message handler for '" .. id .. "'"
+				return self:error("Couldn't find message handler for '" .. id .. "'"
 					.. ", received: " .. message)
 			end
 		end
@@ -212,7 +240,7 @@ L = {
 		return self
 	end,
 
-	get = function(self, mod_name, ...)
+	get = function(self, mod_name, safe, ...)
 		if (self.loaded[mod_name]) then
 			return self.loaded[mod_name]
 		else
@@ -227,9 +255,9 @@ L = {
 			local path, root, attempts = self:get_path(mod_name)
 
 			if (path) then
-				return self:load((root and root .. "." or "") .. mod_name, path, ...)
-			else
-				self:error("Couldn't find module '" .. mod_name .. "'"
+				return self:load(mod_name, path, ...)
+			elseif (not safe) then
+				return nil, self:error("Couldn't find module '" .. mod_name .. "'"
 					.. "\n\nPaths tried:\n" .. table.concat(attempts, "\n"))
 			end
 		end
@@ -239,17 +267,18 @@ L = {
 		local success, chunk = pcall(fs_load, path)
 
 		if (not success or not chunk) then
-			return self:error(chunk)
+			return nil, self:error(chunk)
 		end
 
 		local info = {
-			mod_name = mod_name
+			mod_name = mod_name,
+			mod_path = path
 		}
 
 		local success, object = pcall(chunk, self, info, ...)
 
 		if (not success) then
-			self:error((mod_name or "unknown module") .. " error: " .. object)
+			return nil, self:error((mod_name or "unknown module") .. " error: " .. object)
 		end
 
 		if (object) then
@@ -263,7 +292,7 @@ L = {
 			end
 		end
 
-		return object
+		return object, info
 	end
 }
 
