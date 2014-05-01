@@ -6,10 +6,12 @@ this.desc = "Provides content loading/unloading for the engine."
 this.todo = {
 	"Review directory management.",
 	"Auto-alias directories and provide content discovery.",
-	"Provide automatic content unloading using manual reference counting."
+	"Provide automatic content unloading using manual reference counting.",
+	"Test for successful platform use from platform.filesystem."
 }
 
-local fs = L:get("lcore.utility.filesystem")
+local platform = L:get("lcore.platform.interface"):get()
+local fs = platform.filesystem
 local content
 local load_assoc_meta
 
@@ -49,7 +51,7 @@ content = {
 			end
 		end
 
-		return nil, "Couldn't find loader for path!"
+		return nil, L:notice("Couldn't find loader for path!")
 	end,
 
 	find_loader_in = function(self, set, path)
@@ -133,19 +135,5 @@ content.loaders["default"] = {
 content.associations["default"] = {
 	{"%.lua$", content.loaders.default.lua}
 }
-
-
-if (love) then
-	content.loaders["love"] = {
-		image = love.graphics.newImage,
-		image_data = love.image.newImageData
-	}
-
-	content.associations["love"] = {
-		{"%.png$", content.loaders.love.image},
-		{"%.jpg$", content.loaders.love.image},
-		{"%.bmp$", content.loaders.love.image_data}
-	}
-end
 
 return content
