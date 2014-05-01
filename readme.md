@@ -1,14 +1,18 @@
 # lcore Framework
 Howdy! This is lcore, a framework for Lua, presently also supporting LOVE 0.9.x and 0.8.0. lcore seeks to *extend* applications instead of take complete control of them. It contains facilities for OOP that are easy to interop with, static typing, basic debugging facilities, simple data structures, an event manager, and a large collection of extensible graphics and UI elements.
 
-I (Lucien Greathouse) am the only one working on the project, and its execution is presently tested on the following platforms:
+I (Lucien Greathouse) am the only one working on the project, and its execution is presently tested on the following systems:
 - Ubuntu GNOME 14.04 (64-bit)
 - Fedora 20 (64-bit)
 - Windows 8.1 Pro (64-bit)
 - Windows 7 Pro (64-bit)
 - Android 4.1.1 (using LOVE for Android)
 
-If you can assist in testing, whether through writing tests or performing manual testing, email me@lpghatguy.com and we can get in touch.
+Additionally, lcore supports the following frameworks for providing API support:
+- Vanilla Lua (LuaFileSystem optional)
+- LOVE 0.9.x
+
+If you can assist in testing, whether through writing tests or performing manual testing, email me@lpghatguy.com and we can get in touch. If you would like support for a particular framework, (I'm looking at you, Corona developers) also shoot me an email and we can talk about low-level implementation.
 
 ## Using lcore
 Require `lcore.core` to get the engine itself. This is usually defined locally as `L` for standardization purposes.
