@@ -12,11 +12,11 @@ local image
 image = oop:class(rectangle)({
 	image = nil,
 
-	_new = function(self, new, manager, image, x, y, w, h)
-		new = rectangle._new(self, new, manager, x, y, w, h)
-		new.image = image
+	_new = function(base, self, manager, image, x, y, w, h)
+		self = rectangle._new(base, self, manager, x, y, w, h)
+		self.image = image
 
-		return new
+		return self
 	end,
 
 	draw = function(self)

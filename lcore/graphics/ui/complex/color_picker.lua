@@ -1,8 +1,11 @@
 local L, this = ...
 this.title = "UI Color Picker"
-this.version = "1.0"
+this.version = "1.1"
 this.status = "production"
 this.desc = "A simple HSV color picker"
+this.todo = {
+	"Reimplement with radio buttons for picking sliders"
+}
 
 local oop = L:get("lcore.utility.oop")
 local color = L:get("lcore.graphics.color")
@@ -59,7 +62,7 @@ local function line_draw(self)
 	love.graphics.rectangle("line", self.x, self.value, self.w, 3)
 end
 
-color_picker = oop:class(frame)({
+color_picker = oop:class(frame, event)({
 	hsv = {0, 0, 0, 255},
 	rgb = {0, 0, 0, 255},
 
@@ -69,69 +72,57 @@ color_picker = oop:class(frame)({
 	output_box_backing = nil,
 	numerics_box = nil,
 
-	_new = function(self, new, manager, x, y, w, h)
-		new = frame._new(self, new, manager, x, y, w, h)
-		local child_manager = event:new()
+	_new = function(base, self, manager, x, y, w, h)
+		self = frame._new(base, self, manager, x, y, w, h)
 
-		new.box_picker = image:new(child_manager, nil, 0, 0, w - 100, h)
-		new.box_picker.image_data = love.image.newImageData(new.box_picker.w, new.box_picker.h)
-		new.box_picker.image = love.graphics.newImage(new.box_picker.image_data)
-		new.box_picker.border_width = 1
-		new.box_picker.down = false
-		new.box_picker.value_x = 0
-		new.box_picker.value_y = 0
-		new.box_picker.mousepressed = picker_mousepressed
-		new.box_picker.mousereleased = picker_mousereleased
-		new.box_picker.draw = box_draw
+		self.box_picker = image:new(self, nil, 0, 0, w - 100, h)
+		self.box_picker.image_data = love.image.newImageData(self.box_picker.w, self.box_picker.h)
+		self.box_picker.image = love.graphics.newImage(self.box_picker.image_data)
+		self.box_picker.border_width = 1
+		self.box_picker.down = false
+		self.box_picker.value_x = 0
+		self.box_picker.value_y = 0
+		self.box_picker.mousepressed = picker_mousepressed
+		self.box_picker.mousereleased = picker_mousereleased
+		self.box_picker.draw = box_draw
 
-		new.line_picker = image:new(child_manager, nil, w - 90, 0, 20, h)
-		new.line_picker.image_data = love.image.newImageData(new.line_picker.w, new.line_picker.h)
-		new.line_picker.image = love.graphics.newImage(new.line_picker.image_data)
-		new.line_picker.border_width = 1
-		new.line_picker.down = false
-		new.line_picker.value = 0
-		new.line_picker.mousepressed = picker_mousepressed
-		new.line_picker.mousereleased = picker_mousereleased
-		new.line_picker.draw = line_draw
+		self.line_picker = image:new(self, nil, w - 90, 0, 20, h)
+		self.line_picker.image_data = love.image.newImageData(self.line_picker.w, self.line_picker.h)
+		self.line_picker.image = love.graphics.newImage(self.line_picker.image_data)
+		self.line_picker.border_width = 1
+		self.line_picker.down = false
+		self.line_picker.value = 0
+		self.line_picker.mousepressed = picker_mousepressed
+		self.line_picker.mousereleased = picker_mousereleased
+		self.line_picker.draw = line_draw
 
-		new.output_box = rectangle:new(child_manager, w - 69, 0, 69, 50)
-		new.output_box.border_width = 1
+		self.output_box = rectangle:new(self, w - 69, 0, 69, 50)
+		self.output_box.border_width = 1
 
-		new.output_box_backing = new.output_box:copy()
-		new.output_box_backing.background_color = {255, 255, 255}
-		new.output_box_backing.z = -1
+		self.output_box_backing = self.output_box:copy()
+		self.output_box_backing.background_color = {255, 255, 255}
+		self.output_box_backing.z = -1
 
-		new.numerics_box = frame:new(child_manager, w - 69, 50, 69, h - 50)
-		new.numerics_box.border_width = 1
+		self.numerics_box = frame:new(self, w - 69, 50, 69, h - 50)
+		self.numerics_box.border_width = 1
 
-		new:add(new.box_picker, new.line_picker,
-			new.output_box, new.output_box_backing,
-			new.numerics_box)
+		self:add(self.box_picker, self.line_picker,
+			self.output_box, self.output_box_backing,
+			self.numerics_box)
 
-		new:redraw_line()
-		new:recompute_value()
+		self:redraw_line()
+		self:recompute_value()
 
-		new.child_manager = child_manager
-		new.manager:hook({"draw"}, new)
-
-		return new
+		return self
 	end,
 
 	_connect = function(self, manager)
-		manager:hook({"mousepressed", "mousereleased", "update"}, self)
+		manager:hook({"draw", "mousepressed", "mousereleased", "update"}, self)
 	end,
 
 	_destroy = function(self)
 		self:connect()
 	end,
-
-	--[[mousepressed = function(self, ...)
-		self:fire("mousepressed", ...)
-	end,
-
-	mousereleased = function(self, ...)
-		self:fire("mousereleased", ...)
-	end,]]
 
 	update = function(self, delta)
 		local mx, my = love.mouse.getPosition()

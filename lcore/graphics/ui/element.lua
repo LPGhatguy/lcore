@@ -17,14 +17,14 @@ element = oop:class()({
 	ox = 0,
 	oy = 0,
 
-	_new = function(self, new, manager, x, y)
-		new.manager = manager or new.manager
-		new.x = x or new.x
-		new.y = y or new.y
+	_new = function(base, self, manager, x, y)
+		self.manager = manager or self.manager
+		self.x = x or self.x
+		self.y = y or self.y
 
-		new:connect(manager)
+		self:connect(manager)
 
-		return new
+		return self
 	end,
 
 	_destroy = function(self)
