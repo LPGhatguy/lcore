@@ -4,7 +4,8 @@ this.version = "1.0"
 this.status = "production"
 this.desc = "Provides an efficient interface into using multiple font faces and sizes."
 this.todo = {
-	"Work into lcore.service.content's featureset."
+	"Work into lcore.service.content's featureset.",
+	"Figure out support for bitmap fonts."
 }
 
 local font
