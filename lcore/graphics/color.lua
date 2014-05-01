@@ -41,13 +41,6 @@ color = {
 		green = {0, 128, 0}
 	},
 
-	--[[
-	@method get
-	#title Get Color
-	#def (string name)
-	#returns table result, boolean success
-	#desc Returns the color with the name `name`.
-	]]
 	get = function(self, name)
 		if (self.colors[name]) then
 			return self.colors[name], true
@@ -57,15 +50,6 @@ color = {
 		end
 	end,
 
-	--[[
-	@method set
-	#title Set Color
-	#def (string name)
-	#returns boolean success
-	#desc Sets the color for use in drawing.
-	#desc Equivalent to love.graphics.setColor(color:get(name)), but with protection.
-	#desc Addtionally, issues a warning on failure.
-	]]
 	set = function(self, name)
 		if (self.colors[name]) then
 			love.graphics.setColor(self.colors[name])
@@ -76,49 +60,18 @@ color = {
 		end
 	end,
 
-	--[[
-	@method add
-	#title Add Color
-	#returns void
-	#def (string name, number r, number g, number b, number a)
-	#desc Adds a color of name `name` and components (r, g, b, a)
-	]]
 	add = function(self, name, r, g, b, a)
 		self.colors[name] = self:rgb_static(r, g, b, a)
 	end,
 
-	--[[
-	@method rgb_static
-	#title Make Static Color
-	#def ([number r, number g, number b, number a])
-	#returns table color
-	#desc Creates an immutable, static color object; used in system colors.
-	#see make
-	]]
 	rgb_static = function(self, r, g, b, a)
 		return {r or 0, g or 0, b or 0, a or 255, __nocopy = true, __immutable = true}
 	end,
 
-	--[[
-	@method rgb
-	#title Make Color from RGB
-	#def ([number r, number g, number b, number a])
-	#returns table color
-	#desc Creates an RGB color with components (r, g, b, a) and returns it.
-	#desc `r`, `g`, and `b` default to 0, while `a` defaults to 255.
-	]]
 	rgb = function(self, r, g, b, a)
 		return r or 0, g or 0, b or 0, a or 255
 	end,
 	
-	--[[
-	@method hsv
-	#title Make Color from HSV
-	#def ([number h, number s, number v, number a])
-	#returns table color
-	#desc Creates an RGB color with the HSV components (h, s, v, a) and returns it.
-	#desc Inputs are between (0, 0, 0, 0) and (360, 100, 100, 255)
-	]]
 	hsv = function(self, h, s, v, a)
 		if (s <= 0) then
 			return v, v, v, a
@@ -147,14 +100,6 @@ color = {
 		return (r + m) * 255, (g + m) * 255, (b + m) * 255, a or 255
 	end,
 
-	--[[
-	@method hsl
-	#title Make Color from HSL
-	#def ([number h, number s, number l, number a])
-	#returns table color
-	#desc Creates an RGB color with the HSL components (h, s, l, a) and returns it.
-	#desc Inputs are between (0, 0, 0, 0) and (360, 100, 100, 255)
-	]]
 	hsl = function(self, h, s, l, a)
 		if (s <= 0) then
 	    	return l, l, l, a
@@ -183,14 +128,6 @@ color = {
 		return (r + m) * 255, (g + m) * 255, (b + m) * 255, a or 255
 	end,
 
-	--[[
-	@method mix
-	#title Color Mix
-	#def (number ratio, color first, color second, [color target])
-	#returns color target
-	#desc Mixes colors `first` and `second`, putting the result in `target`.
-	#desc By default, `target` is a new color object.
-	]]
 	mix = function(self, ratio, first, second, target)
 		local iratio = 1 - ratio
 
