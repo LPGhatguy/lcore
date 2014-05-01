@@ -23,6 +23,11 @@ event = oop:class()({
 	registered = {},
 	events = {},
 
+	_destroy = function(self)
+		self.events = {}
+		self.registered = {}
+	end,
+
 	hook = function(self, event_name, object, priority, ...)
 		priority = priority or 0
 
