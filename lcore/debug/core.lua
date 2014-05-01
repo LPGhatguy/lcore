@@ -8,6 +8,8 @@ this.todo = {
 	"Consider using the traditional module format instead of directories."
 }
 
+local platform = L:get("lcore.platform.interface"):get()
+local fs = platform.filesystem
 local core
 
 core = {
@@ -20,17 +22,16 @@ core = {
 	end,
 
 	test_directory = function(self, dir, compile_only)
-		local lfs = love.filesystem
 		local success = true
 
-		for index, file in pairs(lfs.getDirectoryItems(dir)) do
+		for index, file in pairs(fs.list(dir)) do
 			local path = dir .. "/" .. file
 
-			if (lfs.isDirectory(path)) then
+			if (fs.is_directory(path)) then
 				if (not self:test_directory(path, compile_only, verbose)) then
 					success = false
 				end
-			elseif (lfs.isFile(path)) then
+			elseif (fs.is_file(path)) then
 				if (file:match("%.lua$")) then
 					local chunk, fail = loadfile(path)
 

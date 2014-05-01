@@ -181,7 +181,7 @@ L = {
 
 	error = function(self, message)
 		if (self.errors_reported) then
-			error("\n" .. (message or "unknown error"))
+			error("\n" .. (message or "unknown error"), 2)
 		else
 			return message
 		end
@@ -190,7 +190,7 @@ L = {
 	warn = function(self, message)
 		if (self.warnings_reported) then
 			if (self.warnings_as_errors) then
-				error(message or "unknown error", 4)
+				error(message or "unknown error", 2)
 			else
 				print(message)
 			end
