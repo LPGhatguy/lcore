@@ -1,9 +1,9 @@
 local this = {
 	title = "LCORE",
-	version = "0.7.0",
+	version = "0.8.0",
 	status = "production",
 
-	desc = "Provides the basis for LCORE and all its modules.",
+	desc = "Provides the basis for lcore and all its modules.",
 
 	todo = {
 		"Allow deprecation and tracing of tables and other properties.",
@@ -13,17 +13,26 @@ local this = {
 }
 
 if (type(...) ~= "string") then
+	error("lcore invoked incorrectly; use require('lcore.core')")
 	return
 end
 
 local root = (...):match("(.+)%..-%..-$")
 
-local N
 local L
+local N
 
-local fs_exists = function(path)
+local fs_load = function(path)
 	if (L.__internal_platform == "love") then
-		return love.filesystem.exists(path)
+		return love.filesystem.load(path)
+	else
+		return loadfile(path)
+	end
+end
+
+local fs_isfile = function(path)
+	if (L.__internal_platform == "love") then
+		return love.filesystem.isFile(path)
 	else
 		local handle, err = io.open(path, "r")
 
@@ -36,11 +45,23 @@ local fs_exists = function(path)
 	end
 end
 
-local fs_load = function(path)
+local fs_isdir = function(path)
 	if (L.__internal_platform == "love") then
-		return love.filesystem.load(path)
+		return love.filesystem.isDirectory(path)
 	else
-		return loadfile(path)
+		local handle, err = io.open(path, "r")
+
+		if (handle) then
+			handle:close()
+			return false
+		else
+			if (err:lower():match("permission")) then
+				--This is _probably_ a directory
+				return true
+			else
+				return false
+			end
+		end
 	end
 end
 
@@ -122,8 +143,12 @@ L = {
 	end,
 
 	--UTILITY METHODS
-	module_to_path = function(self, mod)
+	module_to_file_path = function(self, mod)
 		return mod:gsub("%.", "/"):gsub("~", "..") .. ".lua"
+	end,
+
+	module_to_dir_path = function(self, mod)
+		return mod:gsub("%.", "/"):gsub("~", "..")
 	end,
 
 	method_name = function(self, method, name)
@@ -132,10 +157,6 @@ L = {
 		return info.name
 			or ("@" .. (info.short_src:match("[^/\\]+[\\/][^/\\]+$") or "(unknown file)")
 				.. ":" .. info.linedefined)
-	end,
-
-	base_path = function(self, path)
-		return path and path:match("(.+)%..-$") or root
 	end,
 
 	--calls a method and ignores any lcore errors
@@ -211,23 +232,33 @@ L = {
 	get_path = function(self, mod)
 		local tried = {}
 
-		local root_path = self:module_to_path(mod)
+		local file_path = self:module_to_file_path(mod)
+		local dir_path = self:module_to_dir_path(mod)
 
-		if (fs_exists(root_path)) then
-			self:report("module_found", "Module found in " .. root_path)
-			return root_path
+		if (fs_isfile(file_path)) then
+			self:report("module_found", "Module found in " .. file_path)
+			return file_path
+		elseif (fs_isdir(dir_path)) then
+			self:report("module_found", "Module found in " .. dir_path)
+			return dir_path
 		else
-			table.insert(tried, root_path)
+			table.insert(tried, file_path)
+			table.insert(tried, dir_path)
 		end
 
 		for index, value in next, self.path do
-			local path = self:module_to_path(value .. "." .. mod)
+			local file_path = self:module_to_file_path(value .. "." .. mod)
+			local dir_path = self:module_to_dir_path(value .. "." .. mod)
 
-			if (fs_exists(path)) then
-				self:report("module_found", "Module found in " .. path)
-				return path, value
+			if (fs_isfile(file_path)) then
+				self:report("module_found", "Module found in " .. file_path)
+				return file_path, value
+			elseif (fs_isdir(dir_path)) then
+				self:report("module_found", "Module found in " .. file_path)
+				return dir_path, value
 			else
-				table.insert(tried, path)
+				table.insert(tried, file_path)
+				table.insert(tried, dir_path)
 			end
 		end
 
@@ -263,7 +294,7 @@ L = {
 		end
 	end,
 
-	load = function(self, mod_name, path, ...)
+	load_file = function(self, mod_name, path, ...)
 		local success, chunk = pcall(fs_load, path)
 
 		if (not success or not chunk) then
@@ -293,6 +324,30 @@ L = {
 		end
 
 		return object, info
+	end,
+
+	load_directory = function(self, mod_name, path)
+		local container = {__lcore_directory = true}
+
+		setmetatable(container, {
+			__index = function(container, key)
+				return self:get(mod_name .. "." .. key)
+			end
+		})
+
+		self.loaded[mod_name] = container
+
+		return container
+	end,
+
+	load = function(self, mod_name, path, ...)
+		if (fs_isdir(path)) then
+			return self:load_directory(mod_name, path, ...)
+		elseif (fs_isfile(path)) then
+			return self:load_file(mod_name, path, ...)
+		else
+			return nil, self:error("Could not load module at '" .. tostring(path) .. "'")
+		end
 	end
 }
 
