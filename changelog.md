@@ -1,5 +1,6 @@
 # 0.8.0
 - First changelog entry (huzzah!)
+
 ## core
 - Removed reliance on love.filesystem.exists
 - LCORE now loads folders, letting users do operations such as:
