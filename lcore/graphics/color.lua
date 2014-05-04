@@ -1,9 +1,11 @@
 local L, this = ...
 this.title = "Color Core"
-this.version = "1.0"
+this.version = "1.1"
 this.status = "production"
 this.desc = "Lists named colors and provides color manipulation functions."
 
+local platform = L:get("lcore.platform.interface")
+local graphics = platform.graphics
 local color
 
 color = {
@@ -52,7 +54,7 @@ color = {
 
 	set = function(self, name)
 		if (self.colors[name]) then
-			love.graphics.setColor(self.colors[name])
+			graphics.set_color_rgb(self.colors[name])
 			return true
 		else
 			L:warn("Couldn't set color '" .. (name or "nil") .. "'")
