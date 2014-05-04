@@ -200,18 +200,18 @@ L = {
 		end
 	end,
 
-	error = function(self, message)
+	error = function(self, message, level)
 		if (self.errors_reported) then
-			error("\n" .. (message or "unknown error"), 2)
+			error("\n" .. (message or "unknown error"), 2 + (level or 0))
 		else
 			return message
 		end
 	end,
 
-	warn = function(self, message)
+	warn = function(self, message, level)
 		if (self.warnings_reported) then
 			if (self.warnings_as_errors) then
-				error(message or "unknown error", 2)
+				error(message or "unknown error", 2 + (level or 0))
 			else
 				print(message)
 			end
