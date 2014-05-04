@@ -1,6 +1,6 @@
 local L, this = ...
 this.title = "Lua Filesystem Interface"
-this.version = "1.0"
+this.version = "1.1"
 this.status = "production"
 this.desc = "Provides a filesystem interface for vanilla Lua."
 
@@ -39,17 +39,6 @@ vanilla_fs = {
 		end
 	end,
 
-	exists = function(path)
-		local handle, errorstring = io.open(path, "r")
-
-		if (handle) then
-			handle:close()
-			return true
-		else
-			return nil, errorstring
-		end
-	end,
-
 	list = function(path)
 		if (lfs_enabled) then
 			local paths = {}
@@ -65,11 +54,24 @@ vanilla_fs = {
 	end,
 
 	is_file = function(path)
-		return nil, L:error("Unable to use filesystem.is_file in platform 'vanilla'!")
+		local handle, err = io.open(path, "r")
+
+		if (handle) then
+			handle:close()
+			return true
+		else
+			return nil, err
+		end
 	end,
 
 	is_directory = function(path)
-		return nil, L:error("Unable to use filesystem.is_directory in platform 'vanilla'!")
+		if (lfs_enabled) then
+			local mode = lfs.attributes(path, "mode")
+
+			return (not path:match("%.+$") and (mode == "directory"))
+		else
+			return nil, L:error("Cannot use is_directory without LFS enabled!")
+		end
 	end
 }
 
