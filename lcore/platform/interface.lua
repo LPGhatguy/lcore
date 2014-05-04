@@ -1,22 +1,21 @@
 local L, this = ...
-this.name = "lcore general interface"
-this.version = "1.0"
+this.name = "lcore gfapi core"
+this.version = "1.1"
 this.status = "prototype"
-this.desc = "Provides an interface to platform-specific interfaces."
+this.desc = "Provides an interface to platform-specific APIs."
 
-local interface
+local core
+local api
 
-interface = {
+core = {
 	platform = nil,
+	platform_name = nil,
+	autoload = true,
 	platforms = {},
 
-	set_platform = function(self, name)
-		self.platform = name
-	end,
-
 	deduce_platform = function(self)
-		if (self.platform) then
-			return self.platform
+		if (self.platform_name) then
+			return self.platform_name
 		else
 			if (love) then
 				return "lcore.platform.love"
@@ -26,23 +25,46 @@ interface = {
 		end
 	end,
 
-	get = function(self, name)
+	set_platform = function(self, name)
+		self:load_platform(name)
+	end,
+
+	load_platform = function(self, name)
 		name = name or self:deduce_platform()
 
 		if (self.platforms[name]) then
+			self.platform = self.platforms[name]
 			return self.platforms[name]
 		end
 
 		local loaded, err = L:get(name .. ".core", true)
 
 		if (loaded) then
-			self.platforms[name] = platform
+			self.platforms[name] = loaded
+			self.platform = loaded
 		else
-			L:error("Could not load platform '" .. (name or "[nil]") .. "', got error: " .. err)
+			return nil, L:error("Could not load platform '" .. (name or "[nil]") .. "', got error: " .. tostring(err), 1)
 		end
-
-		return loaded
 	end
 }
 
-return interface
+api = {
+	__interface = core
+}
+
+setmetatable(api, {
+	__index = function(self, key)
+		local interface = self.__interface
+
+		if (interface.platform) then
+			return interface.platform[key]
+		elseif (interface.autoload) then
+			interface:load_platform()
+			return interface.platform[key]
+		else
+			L:error("Platform not initialized!", 1)
+		end
+	end
+})
+
+return api
