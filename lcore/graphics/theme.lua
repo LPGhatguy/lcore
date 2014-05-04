@@ -11,6 +11,8 @@ this.todo = {
 }
 
 local color = L:get("lcore.graphics.color")
+local platform = L:get("lcore.platform.interface")
+local graphics = platform.graphics
 local theme
 
 theme = {
@@ -42,10 +44,10 @@ theme = {
 
 	set_color = function(self, color_name)
 		if (type(color_name) == "table") then
-			love.graphics.setColor(color_name)
+			graphics.set_color(color_name)
 			return true
 		elseif (self.current[color_name]) then
-			love.graphics.setColor(self.current[color_name])
+			graphics.set_color(self.current[color_name])
 			return true
 		else
 			L:warn("Couldn't set color '" .. (color_name or "nil") .. "'")

@@ -8,7 +8,7 @@ this.todo = {
 	"Consider using the traditional module format instead of directories."
 }
 
-local platform = L:get("lcore.platform.interface"):get()
+local platform = L:get("lcore.platform.interface")
 local fs = platform.filesystem
 local core
 
