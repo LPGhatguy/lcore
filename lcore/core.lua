@@ -1,6 +1,6 @@
 local this = {
 	title = "LCORE",
-	version = "0.8.0",
+	version = "0.8.1",
 	status = "production",
 
 	desc = "Provides the basis for lcore and all its modules.",
