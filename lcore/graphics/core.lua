@@ -1,9 +1,11 @@
 local L, this = ...
 this.title = "Graphics Core"
-this.version = "1.0"
+this.version = "1.0.1"
 this.status = "production"
 this.desc = "Provides core graphics methods for global interaction between graphics components."
 
+local platform = L:get("lcore.platform.interface")
+local graphics = platform.graphics
 local core
 
 core = {
@@ -16,11 +18,11 @@ core = {
 
 		self.x = self.x + x
 		self.y = self.y + y
-		love.graphics.translate(x, y)
+		graphics.translate(x, y)
 	end,
 
 	origin = function(self)
-		love.graphics.origin()
+		graphics.origin()
 		self.x = 0
 		self.y = 0
 	end,
