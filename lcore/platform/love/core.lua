@@ -1,10 +1,13 @@
 local L, this = ...
 this.title = "LOVE Platform Core"
-this.version = "1.0"
+this.version = "1.1"
 this.status = "production"
 this.desc = "Provides useful interfaces for integrating LCORE into LOVE."
 this.notes = {
 	"Do not use provide_hooks and provide_loop at the same time or double event calls will occur."
+}
+this.todo = {
+	"Make provide_loop work with love modules disabled."
 }
 
 if (not love) then
@@ -12,6 +15,7 @@ if (not love) then
 	return
 end
 
+local modules = L:get("lcore.platform.love")
 local event = L:get("lcore.service.event")
 local love_core
 
@@ -19,8 +23,8 @@ love_core = {
 	__platform_name = "love",
 	__platform_version = love._version,
 
-	graphics = L:get("lcore.platform.love.graphics"),
-	filesystem = L:get("lcore.platform.love.filesystem"),
+	graphics = modules.graphics,
+	filesystem = modules.filesystem,
 
 	love_run = function()
 		local global = event.global
@@ -76,7 +80,7 @@ love_core = {
 		end
 	end,
 
-	love_hooks = {
+	hooks = {
 		"load", "quit", "update", "draw",
 		"errhand", "focus", "resize", "visible",
 		"mousepressed", "mousereleased", "mousefocus",
@@ -92,7 +96,7 @@ love_core = {
 	end,
 
 	provide_hooks = function(self, overwrite)
-		for index, value in ipairs(self.love_hooks) do
+		for index, value in ipairs(self.hooks) do
 			if (not love[value] or overwrite) then
 				love[value] = function(...)
 					event.global:fire(value, ...)
