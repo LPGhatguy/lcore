@@ -8,7 +8,7 @@ local oop = L:get("lcore.utility.oop")
 local utable = L:get("lcore.utility.table")
 local functable
 
-functable = oop:class()({
+functable = oop:class() {
 	__functable = true,
 	methods = {},
 
@@ -43,7 +43,7 @@ functable = oop:class()({
 			end
 		end
 	end
-})
+}
 
 setmetatable(functable, {
 	__call = functable.call

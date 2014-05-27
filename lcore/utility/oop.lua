@@ -10,20 +10,18 @@ this.todo = {
 local utable = L:get("lcore.utility.table")
 local oop
 
---Checks an argument for whether it's a type or a type identifier
+--Check whether an item is an object or lcore module name
 local resolve = function(item)
 	return (type(item) == "table") and item or L:get(tostring(item))
 end
 
 oop = {
-	--@method objectify
 	objectify = function(self, target)
 		utable:merge(self.object, target)
 
 		return target
 	end,
 
-	--@method class
 	class = function(self, ...)
 		local new = utable:merge(self.object, {})
 		new:inherit(...)
@@ -36,7 +34,6 @@ oop = {
 		end
 	end,
 
-	--@method mix
 	mix = function(self, ...)
 		local result = {}
 		local mixing = {}

@@ -17,7 +17,7 @@ local function event_sort(first, second)
 	end
 end
 
-event = oop:class()({
+event = oop:class() {
 	__nocopy = true,
 	global = nil,
 	registered = {},
@@ -132,7 +132,7 @@ event = oop:class()({
 			end
 		end
 	end
-})
+}
 
 event.global = event:new()
 
