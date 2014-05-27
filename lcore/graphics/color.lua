@@ -74,7 +74,8 @@ color = {
 		return r or 0, g or 0, b or 0, a or 255
 	end,
 	
-	hsv = function(self, h, s, v, a)
+	--aliased as hsv
+	hsv_to_rgb = function(self, h, s, v, a)
 		if (s <= 0) then
 			return v, v, v, a
 		end
@@ -102,7 +103,8 @@ color = {
 		return (r + m) * 255, (g + m) * 255, (b + m) * 255, a or 255
 	end,
 
-	hsl = function(self, h, s, l, a)
+	--aliased as hsl
+	hsl_to_rgb = function(self, h, s, l, a)
 		if (s <= 0) then
 	    	return l, l, l, a
 	    end
@@ -141,6 +143,9 @@ color = {
 		return target
 	end
 }
+
+color.hsv = color.hsv_to_rgb
+color.hsl = color.hsl_to_rgb
 
 for index, color in pairs(color.colors) do
 	color.__nocopy = true
