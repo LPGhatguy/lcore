@@ -27,9 +27,10 @@ local function picker_mousereleased(self, x, y)
 end
 
 --used in box_picker sub-component
-local box_shader = love.graphics.newShader([[
+local shader_source = [[
 // convert HSV to RGB
 extern float hue;
+extern int depth;
 
 vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords) {
 	vec3 c = vec3(hue, texture_coords.x, 1 - texture_coords.y);
@@ -37,21 +38,9 @@ vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords) 
 	vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
 	vec3 v = c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 
-	return vec4(v, 1.0);
+	return vec4(floor(v * depth) / depth, 1.0);
 }
-]])
-
-local function box_draw(self)
-	love.graphics.setShader(box_shader)
-	image.draw(self)
-	love.graphics.setShader()
-
-	love.graphics.setLineWidth(1)
-	love.graphics.setColor(255, 255, 255, 255)
-	love.graphics.circle("line", self.value_x, self.value_y, 4)
-	love.graphics.setColor(0, 0, 0, 255)
-	love.graphics.circle("line", self.value_x, self.value_y, 5)
-end
+]]
 
 --used in line_picker sub-component
 local function line_draw(self)
@@ -62,9 +51,13 @@ local function line_draw(self)
 	love.graphics.rectangle("line", self.x, self.value, self.w, 3)
 end
 
-color_picker = oop:class(frame, event)({
+color_picker = oop:class(frame, event) {
+	value_x = 1,
+	value_y = 1,
+	value_h = 0,
 	hsv = {0, 0, 0, 255},
 	rgb = {0, 0, 0, 255},
+	depth = 255,
 
 	box_picker = nil,
 	line_picker = nil,
@@ -72,19 +65,32 @@ color_picker = oop:class(frame, event)({
 	output_box_backing = nil,
 	numerics_box = nil,
 
+	box_shader = nil,
+
 	_new = function(base, self, manager, x, y, w, h)
 		self = frame._new(base, self, manager, x, y, w, h)
+
+		self.box_shader = love.graphics.newShader(shader_source)
+		self.box_shader:sendInt("depth", self.depth)
 
 		self.box_picker = image:new(self, nil, 0, 0, w - 100, h)
 		self.box_picker.image_data = love.image.newImageData(self.box_picker.w, self.box_picker.h)
 		self.box_picker.image = love.graphics.newImage(self.box_picker.image_data)
 		self.box_picker.border_width = 1
 		self.box_picker.down = false
-		self.box_picker.value_x = 0
-		self.box_picker.value_y = 0
 		self.box_picker.mousepressed = picker_mousepressed
 		self.box_picker.mousereleased = picker_mousereleased
-		self.box_picker.draw = box_draw
+		self.box_picker.draw = function(this)
+			love.graphics.setShader(self.box_shader)
+			image.draw(this)
+			love.graphics.setShader()
+
+			love.graphics.setLineWidth(1)
+			love.graphics.setColor(255, 255, 255, 255)
+			love.graphics.circle("line", self.value_x, self.value_y, 4)
+			love.graphics.setColor(0, 0, 0, 255)
+			love.graphics.circle("line", self.value_x, self.value_y, 5)
+		end
 
 		self.line_picker = image:new(self, nil, w - 90, 0, 20, h)
 		self.line_picker.image_data = love.image.newImageData(self.line_picker.w, self.line_picker.h)
@@ -131,14 +137,15 @@ color_picker = oop:class(frame, event)({
 			local rx = mx - self.box_picker.x - self.box_picker.ox
 			local ry = my - self.box_picker.y - self.box_picker.oy
 
-			self.box_picker.value_x = math.max(1, math.min(self.box_picker.w, rx))
-			self.box_picker.value_y = math.max(0, math.min(self.box_picker.h, ry))
+			self.value_x = math.max(1, math.min(self.box_picker.w, rx))
+			self.value_y = math.max(0, math.min(self.box_picker.h, ry))
 			self:recompute_value()
 		elseif (self.line_picker.down) then
 			local ry = my - self.line_picker.y - self.line_picker.oy
 
 			self.line_picker.value = math.max(0, math.min(self.line_picker.h, ry))
-			box_shader:send("hue", 1 - (self.line_picker.value / self.line_picker.h))
+			self.box_shader:send("hue", 1 - (self.line_picker.value / self.line_picker.h))
+			self.box_shader:sendInt("depth", self.depth)
 			self:recompute_value()
 		end
 	end,
@@ -159,8 +166,8 @@ color_picker = oop:class(frame, event)({
 
 		self.hsv = {
 			(lh - self.line_picker.value) * 360 / lh,
-			self.box_picker.value_x * 100 / w,
-			(h - self.box_picker.value_y) * 100 / h,
+			self.value_x * 100 / w,
+			(h - self.value_y) * 100 / h,
 			255
 		}
 		local r, g, b, a = color:hsv(unpack(self.hsv))
@@ -177,6 +184,6 @@ color_picker = oop:class(frame, event)({
 	value_changed = function(self)
 		--event
 	end
-})
+}
 
 return color_picker
