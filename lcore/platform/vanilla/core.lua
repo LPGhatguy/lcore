@@ -4,11 +4,15 @@ this.version = "1.0"
 this.status = "production"
 this.desc = "Provides useful interfaces for using lcore with vanilla Lua."
 
-local vanilla_core = L:get("lcore.service.nop"):new()
+local ref_core = L:get("lcore.platform.reference.core")
+local vanilla_core
 
-vanilla_core.__platform_name = "vanilla"
-vanilla_core.__platform_version = "1.0"
+vanilla_core = ref_core:derive {
+	platform_name = "vanilla",
+	platform_version = "1.0",
 
-vanilla_core.filesystem = L:get("lcore.platform.vanilla.filesystem")
+	filesystem = L:get("lcore.platform.vanilla.filesystem"),
+	graphics = L:get("lcore.platform.reference.graphics")
+}
 
 return vanilla_core

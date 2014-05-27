@@ -8,44 +8,43 @@ if (not love.graphics or not love.window) then
 	L:error("Could not get LOVE graphics module")
 end
 
-local love_graphics
+local lg = love.graphics
+local ref_gfx = L:get("lcore.platform.reference.graphics")
+local love_gfx
 
---A list of items that LOVE is the reference API for
-local love_reference = {
-	"rectangle", "circle", "arc",
-	"polygon", "line", "point",
+love_gfx = ref_gfx:derive {
+	immediate = true,
+	retained = false,
 
-	"clear", "present",
-	"origin", "pop", "push",
-	"rotate", "scale", "shear",
-	"translate"
+	rectangle = lg.rectangle,
+	circle = lg.circle,
+	arc = lg.arc,
+	polygon = lg.polygon,
+	line = lg.line,
+	point = lg.point,
+
+	clear = lg.clear,
+	origin = lg.origin,
+	pop = lg.pop,
+	push = lg.push,
+
+	translate = lg.translate,
+	scale = lg.scale,
+	rotate = lg.rotate,
+	shear = lg.shear,
+
+	set_color_rgb = lg.setColor,
+	get_color_rgb = lg.getColor,
+	set_color = lg.setColor,
+	get_color = lg.getColor,
+
+	set_background_color_rgb = lg.setBackgroundColor,
+	get_background_color_rgb = lg.getBackgroundColor,
+	set_background_color = lg.setBackgroundColor,
+	get_background_color = lg.getBackgroundColor,
+
+	set_scissor = lg.setScissor,
+	get_scissor = lg.getScissor
 }
 
---Items explicitly defined here are not reference API entries or have been renamed
-love_graphics = {
-	set_color_rgb = love.graphics.setColor,
-	get_color_rgb = love.graphics.getColor,
-	set_color = love.graphics.setColor,
-	get_color = love.graphics.getColor,
-	set_background_color_rgb = love.graphics.setBackgroundColor,
-	get_background_color_rgb = love.graphics.getBackgroundColor,
-	set_scissor = love.graphics.setScissor,
-	get_scissor = love.graphics.getScissor,
-
-	draw = love.graphics.draw,
-	print = love.graphics.print,
-	printf = love.graphics.printf,
-}
-
-for index, item in ipairs(love_reference) do
-	love_graphics[item] = love.graphics[item]
-end
-
-setmetatable(love_graphics, {
-	__index = function(self, key)
-		L:warn("Falling back to love for graphics entry '" .. tostring(key) .. "'")
-		return love.graphics[key]
-	end
-})
-
-return love_graphics
+return love_gfx

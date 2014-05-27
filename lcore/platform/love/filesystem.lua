@@ -8,22 +8,15 @@ if (not love.filesystem) then
 	L:error("LOVE filesystem API not found for using LOVE filesystem platform.")
 end
 
-local love_filesystem
+local ref_fs = L:get("lcore.platform.reference.filesystem")
+local love_fs
 
-love_filesystem = {
+love_fs = ref_fs:derive {
 	read = love.filesystem.read,
 	write = love.filesystem.write,
-	exists = love.filesystem.exists,
 	list = love.filesystem.getDirectoryItems,
 	is_file = love.filesystem.isFile,
 	is_directory = love.filesystem.isDirectory
 }
 
-setmetatable(love_filesystem, {
-	__index = function(self, key)
-		L:warn("Falling back to love for filesystem entry '" .. tostring(key) .. "'")
-		return love.filesystem[key]
-	end
-})
-
-return love_filesystem
+return love_fs

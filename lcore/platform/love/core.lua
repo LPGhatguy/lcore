@@ -17,16 +17,49 @@ end
 
 local modules = L:get("lcore.platform.love")
 local event = L:get("lcore.service.event")
+local ref_core = L:get("lcore.platform.reference.core")
 local love_core
 
-love_core = {
-	__platform_name = "love",
-	__platform_version = love._version,
+love_core = ref_core:derive {
+	platform_name = "love",
+	platform_version = love._version,
 
 	graphics = modules.graphics,
 	filesystem = modules.filesystem,
 
-	love_run = function()
+	hooks = {
+		"load", "quit", "update", "draw",
+		"errhand", "focus", "resize", "visible",
+		"mousepressed", "mousereleased", "mousefocus",
+		"keypressed", "keyreleased",
+		"textinput", "threaderror",
+		"gamepadaxis", "gamepadpressed", "gamepadreleased",
+		"joystickadded", "joystickaxis", "joystickhat",
+		"joystickpressed", "joystickreleased", "joystickremoved"
+	},
+
+	init = function(self)
+		if (self.__provide_loop) then
+			love.run = self.__run
+		else
+			for index, value in ipairs(self.hooks) do
+				if (not love[value] or overwrite) then
+					love[value] = function(...)
+						event.global:fire(value, ...)
+					end
+				end
+			end
+		end
+	end,
+
+	quit = function(self)
+		love.event.push("quit")
+	end,
+
+	--Implementation-specific fields:
+	__provide_loop = true,
+
+	__run = function()
 		local global = event.global
 		local dt = 0
 
@@ -78,46 +111,7 @@ love_core = {
 
 			love.timer.sleep(0.001)
 		end
-	end,
-
-	hooks = {
-		"load", "quit", "update", "draw",
-		"errhand", "focus", "resize", "visible",
-		"mousepressed", "mousereleased", "mousefocus",
-		"keypressed", "keyreleased",
-		"textinput", "threaderror",
-		"gamepadaxis", "gamepadpressed", "gamepadreleased",
-		"joystickadded", "joystickaxis", "joystickhat",
-		"joystickpressed", "joystickreleased", "joystickremoved"
-	},
-
-	provide_loop = function(self)
-		love.run = self.love_run
-	end,
-
-	provide_hooks = function(self, overwrite)
-		for index, value in ipairs(self.hooks) do
-			if (not love[value] or overwrite) then
-				love[value] = function(...)
-					event.global:fire(value, ...)
-				end
-			end
-		end
-	end,
-
-	start = function(self)
-	end,
-
-	init = function(self)
-		self:provide_loop()
-	end,
-
-	deinit = function(self)
 	end
 }
-
-setmetatable(love_core, {
-	__index = love
-})
 
 return love_core

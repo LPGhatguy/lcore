@@ -1,7 +1,7 @@
 local L, this = ...
-this.name = "lcore gfapi core"
+this.name = "LCORE PAAPI"
 this.version = "1.1"
-this.status = "prototype"
+this.status = "production"
 this.desc = "Provides an interface to platform-specific APIs."
 
 local core
