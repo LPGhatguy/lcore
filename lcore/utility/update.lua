@@ -80,7 +80,7 @@ update = {
 	end,
 
 	do_update = function(self)
-		self:load()
+		self:unload()
 		self:remote_update()
 		self:load()
 	end
