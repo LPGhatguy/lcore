@@ -2,9 +2,13 @@
 - Consider renaming lcore.service.nop to lcore.utility.nop
 - Make error messages more useful from lcore's error function
 - Make some form of templates! (such as containers like graphics.color and graphics.theme)
-- Update or replace content manager with lcore's General Framework Interface (GFI)
+- Update or replace content manager with lcore's Platform Agnosticism API (PAAPI)
+- Rewrite color picker
 - Standardize and write demos
 - Write unit tests
+- Write container::bounding_box
+- Update frame::contains using container::bounding_box
+- Fill in scrolling_frame
 
 # Complete(ish) Features
 - Profiling (debug.stopwatch)

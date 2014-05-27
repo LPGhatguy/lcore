@@ -1,3 +1,22 @@
+# 0.9.0 (in development)
+- Removed platform.nspire, it was a stub
+- Removed graphics.theme, this will be replaced but was not useful.
+- Removed utility.math, it only had a non-functional expmod method.
+- Usages of utility.oop.class now omit parentheses
+- Removed more straggling documentation from the old documentation engine
+- Cleaned up a couple typos in a few modules
+
+## lcore.platform (PAAPI)
+- Created platform.reference as a reference, no-op implementation of methods and features.
+- platform.love and platform.vanilla now properly conform to this prototype PAAPI standard.
+
+## lcore.graphics
+- Reworked internal code of `graphics.ui.complex.color_picker`
+- Added hsv_to_rgb and hsl_to_rgb to `graphics.color` in preparation for their inverse counterparts
+- Internal changes for `graphics.ui.image`
+- Fixed default sizing bug in `graphics.ui.rectangle`
+
+
 # 0.8.1
 - Improved PAAPI compliance on several modules
 
