@@ -1,7 +1,7 @@
 local L, this = ...
 this.title = "Debug Core"
 this.version = "0.2"
-this.status = "incomplete"
+this.status = "development"
 this.desc = "Provides debug utility methods for debugging and profiling projects."
 this.todo = {
 	"Better emulate L:load in test_directory.",
