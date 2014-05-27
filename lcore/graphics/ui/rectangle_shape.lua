@@ -8,15 +8,15 @@ local oop = L:get("lcore.utility.oop")
 local element = L:get("lcore.graphics.ui.element")
 local rectangle_shape
 
-rectangle_shape = oop:class(element)({
+rectangle_shape = oop:class(element) {
 	w = 0,
 	h = 0,
 
 	_new = function(base, self, manager, x, y, w, h)
-		self = element._new(base, self, manager, x, y)
+		element._new(base, self, manager, x, y)
 		
 		self.w = w or base.w
-		self.h = h or base.w
+		self.h = h or base.h
 
 		return self
 	end,
@@ -34,9 +34,10 @@ rectangle_shape = oop:class(element)({
 	end,
 
 	contains = function(self, x, y)
-		local absx, absy = self.x + self.ox, self.y + self.oy
+		local absx = self.x + self.ox
+		local absy = self.y + self.oy
 		return (x >= absx and x <= absx + self.w and y >= absy and y <= absy + self.h)
 	end
-})
+}
 
 return rectangle_shape
