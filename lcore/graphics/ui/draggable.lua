@@ -8,7 +8,7 @@ local oop = L:get("lcore.utility.oop")
 local event = L:get("lcore.service.event")
 local draggable
 
-draggable = oop:class()({
+draggable = oop:class() {
 	sx = 0,
 	sy = 0,
 	smx = 0,
@@ -62,6 +62,6 @@ draggable = oop:class()({
 
 	drag_end = function(self)
 	end
-})
+}
 
 return draggable

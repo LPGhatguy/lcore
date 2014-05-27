@@ -11,7 +11,7 @@ local platform = L:get("lcore.platform.interface")
 local graphics = platform.graphics
 local frame
 
-frame = oop:class(rectangle, container)({
+frame = oop:class(rectangle, container) {
 	clips_children = true,
 
 	draw = function(self)
@@ -24,6 +24,6 @@ frame = oop:class(rectangle, container)({
 		container.draw(self)
 		graphics.set_scissor()
 	end
-})
+}
 
 return frame

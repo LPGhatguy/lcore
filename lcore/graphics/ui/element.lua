@@ -9,7 +9,7 @@ local gcore = L:get("lcore.graphics.core")
 local event = L:get("lcore.service.event")
 local element
 
-element = oop:class()({
+element = oop:class() {
 	manager = nil,
 	x = 0,
 	y = 0,
@@ -19,8 +19,8 @@ element = oop:class()({
 
 	_new = function(base, self, manager, x, y)
 		self.manager = manager or self.manager
-		self.x = x or self.x
-		self.y = y or self.y
+		self.x = x or base.x
+		self.y = y or base.y
 
 		self:connect(manager)
 
@@ -56,6 +56,6 @@ element = oop:class()({
 	contains = function(self, x, y)
 		return true
 	end
-})
+}
 
 return element

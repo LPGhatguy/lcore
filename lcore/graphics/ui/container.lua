@@ -3,6 +3,9 @@ this.title = "UI Container"
 this.version = "1.1"
 this.status = "production"
 this.desc = "Holds other UI items and passes draw calls to them."
+this.todo = {
+	"Implement a bounding_box method"
+}
 
 local oop = L:get("lcore.utility.oop")
 local element = L:get("lcore.graphics.ui.element")
@@ -21,7 +24,7 @@ local child_sorter = function(first, second)
 	end
 end
 
-container = oop:class(element)({
+container = oop:class(element) {
 	children = {},
 
 	add = function(self, ...)
@@ -66,6 +69,6 @@ container = oop:class(element)({
 		end
 		gcore:translate(-self.x, -self.y)
 	end
-})
+}
 
 return container

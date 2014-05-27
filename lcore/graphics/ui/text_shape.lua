@@ -9,14 +9,14 @@ local element = L:get("lcore.graphics.ui.element")
 local font = L:get("lcore.graphics.font")
 local label
 
-label = oop:class(element)({
+label = oop:class(element) {
 	text = "",
 	align = "center", -- {left, center, right}
 	valign = "center", -- {top, center, bottom}
 	font = nil,
 
 	_new = function(base, self, manager, text, x, y, h, align)
-		self = element._new(base, self, manager, x, y)
+		element._new(base, self, manager, x, y)
 
 		self.font = font:get(h)
 		self.text = text or self.text
@@ -36,6 +36,6 @@ label = oop:class(element)({
 		return (x >= self.x and x <= self.x + w and
 			y >= self.y and y <= self.y + h)
 	end
-})
+}
 
 return label

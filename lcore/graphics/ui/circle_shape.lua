@@ -8,11 +8,11 @@ local oop = L:get("lcore.utility.oop")
 local element = L:get("lcore.graphics.ui.element")
 local circle_shape
 
-circle_shape = oop:class(element)({
+circle_shape = oop:class(element) {
 	r = 0,
 
 	_new = function(base, self, manager, x, y, r)
-		self = element._new(base, self, manager, x, y)
+		element._new(base, self, manager, x, y)
 		self.r = r or self.r
 
 		return self
@@ -32,6 +32,6 @@ circle_shape = oop:class(element)({
 	contains = function(self, x, y)
 		return ((x - self.x) ^ 2 + (y - self.y) ^ 2) <= (self.r ^ 2)
 	end
-})
+}
 
 return circle_shape

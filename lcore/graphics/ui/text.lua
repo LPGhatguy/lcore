@@ -10,7 +10,7 @@ local font = L:get("lcore.graphics.font")
 local text_shape = L:get("lcore.graphics.ui.text_shape")
 local label
 
-label = oop:class(text_shape)({
+label = oop:class(text_shape) {
 	text_color = color:get("white"),
 
 	draw = function(self)
@@ -38,6 +38,6 @@ label = oop:class(text_shape)({
 			love.graphics.print(self.text, self.x, y)
 		end
 	end
-})
+}
 
 return label

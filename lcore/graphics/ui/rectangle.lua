@@ -9,7 +9,7 @@ local rectangle_shape = L:get("lcore.graphics.ui.rectangle_shape")
 local color = L:get("lcore.graphics.color")
 local rectangle
 
-rectangle = oop:class(rectangle_shape)({
+rectangle = oop:class(rectangle_shape) {
 	background_color = color:get("darkgray"),
 	border = true,
 	border_color = color:get("silver"),
@@ -29,6 +29,6 @@ rectangle = oop:class(rectangle_shape)({
 		love.graphics.setColor(self.background_color)
 		love.graphics.rectangle("fill", self.x, self.y, self.w, self.h)
 	end
-})
+}
 
 return rectangle

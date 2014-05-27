@@ -9,7 +9,7 @@ local color = L:get("lcore.graphics.color")
 local circle_shape = L:get("lcore.graphics.ui.circle_shape")
 local circle
 
-circle = oop:class(circle_shape)({
+circle = oop:class(circle_shape) {
 	background_color = color:get("darkgray"),
 	border_color = color:get("silver"),
 	border_width = 2,
@@ -26,6 +26,6 @@ circle = oop:class(circle_shape)({
 		love.graphics.setColor(self.background_color)
 		love.graphics.circle("fill", self.x, self.y, self.r)
 	end
-})
+}
 
 return circle
