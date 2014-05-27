@@ -6,7 +6,7 @@ LCORE is seen sometimes in full uppercase and other times completely lowercase. 
 ## Modules
 
 ### Module locations
-Modules in lcore are referred to using their 'module name,' which is not unlike Lua's path format when using `require`. Folders are separated by a period, and folder names should generally be lowercase. Keeping everything lowercase solves problems between case sensitive operating systems like *nix and operating systems like Windows that are more lax.
+Modules in lcore are referred to using their 'module name,' which is not unlike Lua's path format when using `require`. Folders are separated by a period, and folder names should generally be lowercase. Keeping everything lowercase solves problems between case sensitive operating systems like *nix and operating systems like Windows that are more lax. Generally, we refer to modules with as short of a name as is possible to stay unambiguous. This means that `lcore.graphics.ui.complex.color_picker` might just be referenced as `ui.complex.color_picker` or even just `color_picker`.
 
 ### Versions
 Versions should have two to three numbers depending on granularity of updates. These should be separated by periods and kept in a version string that is discussed in the `General Form` section. These numbers may be of any number of digits but should not have leading zeros. The first number should denote major paradigm changes in the module, and is indeed the 'major version.' The second number should be incremented with code-breaking API changes. Additions are not necessarily breaking changes in this case. This is the 'minor version' number. The third number should be incremented only when the designated change will not break existing code and should only fix bugs and adjust to intended behavior. This field is the 'revision' number.
@@ -38,7 +38,7 @@ this.todo = {
 
 The first line of the example creates local variables referencing two important things for a module. The first is a reference to `lcore.core`, where most of the interaction with lcore will be piped through. The second field, `this` is a reference to a metadata table about the module. This is the field where information about the module should be put in place, such as its name and version. All fields are _optional_.
 
-The list of currently accepted fields are as follows:
+The list of currently standard fields are as follows:
 - `title` - The name of the module
 - `author` - Whoever wrote the module
 - `status` - The current development status (see 'Modules - Versions')
@@ -93,9 +93,66 @@ example_module = oop:class(event) {
 return example_module
 ```
 
-Note that we exclude the parentheses around our curly braces even though we are calling a method returned from oop.class. This is purely for ease of modification, as turning a regular table into a class becomes much simpler.
+Note that we exclude the parentheses around our curly braces even though we are calling a method returned from oop.class. This is purely for aesthetics and ease of modification, as turning a regular table into a class becomes much simpler.
 
 The last line is the most important, as it returns the module itself and ensures it can be registered by lcore and properly retrieved by the framework. It is _not_ necessary to return the `this` field for the module.
 
 ## Lua Conventions
-*todo*
+
+### Casing
+Module fields should be entirely **lowercase**, using underscores between words, like these:
+- awesome_module
+- hey_itsa_me_mario
+- lcore_nifty_thing
+
+With the exception of the reference to lcore itself, local variables in modules should follow the same format. LCORE should be referenced with a single uppercase L, as in `L`. The following are ***not*** acceptable names for fields:
+- doYouWantToBuildASnowman
+- IAMALOUDPERSON
+- PascalCaseRules
+- inversEcameLcasEyaY
+- LCORE_module
+
+Static fields may, under extreme circumstances, such as function flags or bitfields, can be in all UPPERCASE, also using underscores between words. These are of this form:
+- OBEY_GOVERNMENT
+- CHEESE_GRATER_ENABLED
+
+Module fields that are intended to be 'semi-private', or available but not necessarily recommended for use, can be prefixed with a double-underscore, like so:
+- __you_can_kinda_see_me
+- __such_trickery
+
+Methods and arguments follow these same rules. Any deviation from these standards will be noted and your family will be taken captive.
+
+### Functions
+
+Function calls should appear as follows:
+```lua
+grate_cheese(cheese)
+cool_method(cool_arg1, cool_arg2)
+```
+
+Parentheses can be omitted only if the only argument to the function is a table and that table spans multiple lines. This usually means calls to `oop.class` and not much else.
+
+Inline function definitions should look like so:
+```lua
+local my_module
+
+my_module = {
+	some_method = function(self, arg1)
+		--method body
+	end,
+
+	some_function = function(arg)
+		--function body
+	end
+}
+```
+
+Having 'self' as the first argument to a function in a table implicit declares it as a method, intended to be called with colon syntax:
+```lua
+my_module:some_method(6)
+```
+
+Otherwise, a method should be called with dot syntax:
+```lua
+my_module.some_function(42)
+```
