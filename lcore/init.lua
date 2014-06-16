@@ -1,6 +1,6 @@
 local this = {
 	title = "LCORE",
-	version = "0.9.0",
+	version = "1.0.0",
 	status = "development",
 
 	desc = "Provides the basis for lcore and all its modules.",
@@ -13,11 +13,11 @@ local this = {
 }
 
 if (type(...) ~= "string") then
-	error("lcore invoked incorrectly; use require('lcore.core')")
+	error("lcore invoked incorrectly; use require('lcore')")
 	return
 end
 
-local root = (...):match("(.+)%..-%..-$")
+local root = (...):match("(.+)%..-$")
 
 local L
 local N
@@ -128,6 +128,7 @@ L = {
 	warnings_reported = true,
 	warnings_as_errors = false,
 	debug = true,
+	autotest = true,
 
 	path = {root},
 	loaded = {},
@@ -295,10 +296,10 @@ L = {
 	end,
 
 	load_file = function(self, mod_name, path, ...)
-		local success, chunk = pcall(fs_load, path)
+		local chunk, err = fs_load(path)
 
-		if (not success or not chunk) then
-			return nil, self:error(chunk)
+		if (not chunk) then
+			return nil, self:error(err)
 		end
 
 		local info = {
@@ -316,10 +317,10 @@ L = {
 			if (mod_name) then
 				self.loaded[mod_name] = object
 				self.metadata[mod_name] = info
-			end
 
-			if (self.autotest) then
-				self.test:run(object)
+				if (self.autotest and info.test_module) then
+					self:get(info.test_module)
+				end
 			end
 		end
 
@@ -331,7 +332,8 @@ L = {
 
 		setmetatable(container, {
 			__index = function(container, key)
-				return self:get(mod_name .. "." .. key)
+				container[key] = self:get(mod_name .. "." .. key)
+				return container[key]
 			end
 		})
 
