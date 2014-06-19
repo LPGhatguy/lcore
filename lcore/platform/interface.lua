@@ -1,5 +1,5 @@
 local L, this = ...
-this.name = "LCORE PAAPI"
+this.name = "LCORE Platform Agnosticism API"
 this.version = "1.1"
 this.status = "production"
 this.desc = "Provides an interface to platform-specific APIs."

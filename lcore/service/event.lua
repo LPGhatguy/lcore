@@ -59,6 +59,8 @@ event = oop:class() {
 		table.insert(target, event)
 		self.registered[event_name][object] = event
 
+		self:sort(event_name)
+
 		return true
 	end,
 
