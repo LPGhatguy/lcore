@@ -303,8 +303,8 @@ L = {
 		end
 
 		local info = {
-			mod_name = mod_name,
-			mod_path = path
+			name = mod_name,
+			path = path
 		}
 
 		local success, object = pcall(chunk, self, info, ...)
