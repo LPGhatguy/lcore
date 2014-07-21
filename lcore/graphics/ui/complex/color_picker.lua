@@ -51,7 +51,7 @@ local function line_draw(self)
 	love.graphics.rectangle("line", self.x, self.value, self.w, 3)
 end
 
-color_picker = oop:class(frame, event) {
+color_picker = oop:class(event, frame) {
 	value_x = 1,
 	value_y = 1,
 	value_h = 0,

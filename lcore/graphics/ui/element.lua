@@ -18,7 +18,7 @@ element = oop:class() {
 	oy = 0,
 
 	_new = function(base, self, manager, x, y)
-		self.manager = manager or self.manager
+		self.manager = manager or base.manager
 		self.x = x or base.x
 		self.y = y or base.y
 

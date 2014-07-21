@@ -9,13 +9,19 @@ local event = L:get("lcore.service.event")
 local draggable
 
 draggable = oop:class() {
-	sx = 0,
-	sy = 0,
-	smx = 0,
-	smy = 0,
+	start_x = 0,
+	start_y = 0,
+	start_mouse_x = 0,
+	start_mouse_y = 0,
 
 	draggable = true,
 	dragging = false,
+	x_locked = false,
+	x_max = math.huge,
+	x_min = -math.huge,
+	y_locked = false,
+	y_max = math.huge,
+	y_min = -math.huge,
 	buttons = {["l"] = true},
 
 	_connect = function(self, manager)
@@ -30,10 +36,10 @@ draggable = oop:class() {
 		if (self.draggable and self.buttons[button] and self:contains(x, y)) then
 			self.dragging = true
 
-			self.sx = self.x
-			self.sy = self.y
-			self.smx = x
-			self.smy = y
+			self.start_x = self.x
+			self.start_y = self.y
+			self.start_mouse_x = x
+			self.start_mouse_y = y
 
 			self:drag_start()
 		end
@@ -41,20 +47,33 @@ draggable = oop:class() {
 
 	mousereleased = function(self, mx, my, button)
 		if (self.dragging) then
-			self.x = self.sx + (mx - self.smx)
-			self.y = self.sy + (my - self.smy)
-			self.dragging = false
+			self:update(0)
 
+			self.dragging = false
 			self:drag_end()
 		end
 	end,
 
 	update = function(self, delta)
 		if (self.dragging) then
+			local lx, ly = self.x, self.y
+
 			local mx, my = love.mouse.getPosition()
-			self.x = self.sx + (mx - self.smx)
-			self.y = self.sy + (my - self.smy)
+			if (not self.x_locked) then
+				self.x = math.max(self.x_min, math.min(self.x_max, self.start_x + (mx - self.start_mouse_x)))
+			end
+
+			if (not self.y_locked) then
+				self.y = math.max(self.y_min, math.min(self.y_max, self.start_y + (my - self.start_mouse_y)))
+			end
+
+			if (self.x ~= lx or self.y ~= ly) then
+				self:drag_moved()
+			end
 		end
+	end,
+
+	drag_moved = function(self)
 	end,
 
 	drag_start = function(self)

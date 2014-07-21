@@ -18,11 +18,11 @@ frame = oop:class(rectangle, container) {
 		rectangle.draw(self)
 
 		if (self.clips_children) then
-			graphics.set_scissor(self.x + self.ox, self.y + self.oy, self.w, self.h)
+			graphics.scissor(self.x + self.ox, self.y + self.oy, self.w, self.h)
 		end
 
 		container.draw(self)
-		graphics.set_scissor()
+		graphics.scissor()
 	end
 }
 

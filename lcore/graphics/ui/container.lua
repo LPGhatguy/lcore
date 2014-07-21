@@ -8,6 +8,7 @@ this.todo = {
 }
 
 local oop = L:get("lcore.utility.oop")
+local event = L:get("lcore.service.event")
 local element = L:get("lcore.graphics.ui.element")
 local gcore = L:get("lcore.graphics.core")
 local container
@@ -24,38 +25,36 @@ local child_sorter = function(first, second)
 	end
 end
 
-container = oop:class(element) {
+container = oop:class(element, event) {
 	children = {},
 
 	add = function(self, ...)
 		local arg = {...}
 
-		for index = 1, #arg do
-			table.insert(self.children, arg[index])
+		for index, entry in ipairs({...}) do
+			table.insert(self.children, entry)
+
+			if (entry.connect) then
+				entry:connect(self)
+			end
 		end
 
 		self:sort()
 	end,
 
 	remove = function(self, item)
-		for key, value in pairs(self.children) do
-			if (value == item) then
-				self.children[key] = nil
+		for index, child in ipairs(self.children) do
+			if (child == item) then
+				if (child.connect) then
+					child:connect()
+				end
+
+				self.children[index] = nil
 				return true
 			end
 		end
 
 		return false
-	end,
-
-	fire = function(self, event_name, ...)
-		for index = 1, #self.children do
-			local child = self.children[index]
-
-			if (child[event_name]) then
-				child[event_name](child, ...)
-			end
-		end
 	end,
 
 	sort = function(self)
@@ -64,10 +63,46 @@ container = oop:class(element) {
 
 	draw = function(self)
 		gcore:translate(self.x, self.y)
-		for index, item in next, self.children do
-			item:draw()
+		for index, child in ipairs(self.children) do
+			if (child.draw) then
+				child:draw()
+			end
 		end
 		gcore:translate(-self.x, -self.y)
+	end,
+
+	--Assumes objects to be positioned from their upper-left corner
+	--This fails on text_shape objects, sadly, because of their align property
+	--It shall be fixed!
+	bounding_box = function(self)
+		local x1, y1
+		local x2, y2
+		local sets
+
+		for index, child in ipairs(self.children) do
+			local x, y = child.x, child.y
+			local w, h = child.w, child.h
+
+			if (x and y) then
+				if (sets) then
+					x1 = math.min(x1, x)
+					y1 = math.min(y1, y)
+				else
+					sets = true
+					x1 = x
+					y1 = y
+					x2 = x
+					y2 = y
+				end
+
+				if (w and h) then
+					x2 = math.max(x2, x + w)
+					y2 = math.max(y2, y + h)
+				end
+			end
+		end
+
+		return x1 or 0, y1 or 0, x2 or 0, y2 or 0
 	end
 }
 
