@@ -3,9 +3,6 @@ this.title = "LOVE Platform Core"
 this.version = "1.1"
 this.status = "production"
 this.desc = "Provides useful interfaces for integrating LCORE into LOVE."
-this.notes = {
-	"Do not use provide_hooks and provide_loop at the same time or double event calls will occur."
-}
 this.todo = {
 	"Make provide_loop work with love modules disabled."
 }
@@ -18,6 +15,7 @@ end
 local modules = L:get("lcore.platform.love")
 local event = L:get("lcore.service.event")
 local ref_core = L:get("lcore.platform.reference.core")
+local love_gfx = L:get("lcore.platform.love.graphics")
 local love_core
 
 love_core = ref_core:derive {
@@ -98,8 +96,8 @@ love_core = ref_core:derive {
 			global:fire("update", dt)
 
 			if (love.window.isCreated()) then
-				love.graphics.clear()
-				love.graphics.origin()
+				love_gfx.clear()
+				love_gfx.origin()
 
 				if (love.draw) then
 					love.draw()
