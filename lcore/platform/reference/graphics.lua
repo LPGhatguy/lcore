@@ -5,6 +5,8 @@ this.status = "prototype"
 this.desc = "A no-op module providing a reference API"
 
 local utable = L:get("lcore.utility.table")
+local platform = L:get("lcore.platform.interface")
+local oop = L:get("lcore.utility.oop")
 local ref_gfx
 
 local gfx_nop = function(name, ...)
@@ -26,9 +28,6 @@ ref_gfx = {
 		return utable:copymerge(self, target)
 	end,
 
-	immediate = true,
-	retained = false,
-
 	--IMMEDIATE-MODE API
 	rectangle = gfx_nop("rectangle"),
 	circle = gfx_nop("circle"),
@@ -46,19 +45,53 @@ ref_gfx = {
 	scale = gfx_nop("scale"),
 	rotate = gfx_nop("rotate"),
 	shear = gfx_nop("shear"),
+	scissor = gfx_nop("scissor"),
 
-	set_color_rgb = gfx_nop("set_color_rgb"),
-	get_color_rgb = gfx_nop("get_color_rgb"),
+	project = gfx_nop("project"),
+	unproject = gfx_nop("unproject"),
+
+	set_color_rgba = gfx_nop("set_color_rgba"),
+	get_color_rgba = gfx_nop("get_color_rgba"),
 	set_color = gfx_nop("set_color"),
 	get_color = gfx_nop("get_color"),
 
 	set_background_color_rgb = gfx_nop("set_background_color_rgb"),
-	get_background_color_rgb = gfx_nop("get_background_color_rgb"),
+	get_background_color_rgb = gfx_nop("get_background_color_rgb", 0, 0, 0, 0),
 	set_background_color = gfx_nop("set_background_color"),
-	get_background_color = gfx_nop("get_background_color"),
+	get_background_color = gfx_nop("get_background_color", 0, 0, 0, 0),
 
-	set_scissor = gfx_nop("set_scissor"),
-	get_scissor = gfx_nop("get_scissor")
+	retained = {
+		rectangle = oop:class() {
+			x = 0,
+			y = 0,
+			w = 0,
+			h = 0,
+			color = {255, 255, 255, 255},
+			fill = true,
+			line_width = 2,
+			__gfx = nil,
+
+			_new = function(base, self, x, y, w, h)
+				self.__gfx = platform.graphics
+
+				self.x = x or base.x
+				self.y = y or base.y
+				self.w = w or base.w
+				self.h = h or base.h
+
+				return self
+			end,
+
+			hook = function(self, handler)
+				handler:hook("draw", self)
+			end,
+
+			draw = function(self)
+				self.__gfx.set_color_rgba(self.color)
+				self.__gfx.rectangle(self.fill and "fill" or "line", self.x, self.y, self.w, self.h)
+			end
+		}
+	}
 }
 
 return ref_gfx

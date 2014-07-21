@@ -6,9 +6,10 @@
 - Rewrite color picker
 - Standardize and write demos
 - Write unit tests
-- Write container::bounding_box
-- Update frame::contains using container::bounding_box
-- Fill in scrolling_frame
+- Write bounding_box method for all UI elements with area
+- Merge graphics.core into PAAPI
+- Provide subscissoring
+- Receieve generic event calls with special hook
 
 # Complete(ish) Features
 - Profiling (debug.stopwatch)
