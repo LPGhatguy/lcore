@@ -19,6 +19,9 @@ label = oop:class(text_shape) {
 		local w = self.font:getWidth(self.text)
 		local h = self.font:getHeight()
 
+		self.w = w
+		self.h = h
+
 		love.graphics.setFont(self.font)
 		love.graphics.setColor(self.text_color)
 
