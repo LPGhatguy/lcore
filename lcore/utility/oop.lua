@@ -1,6 +1,6 @@
 local L, this = ...
 this.title = "Object Orientation Provider"
-this.version = "1.3"
+this.version = "1.4"
 this.status = "production"
 this.desc = "Provides advanced object orientation capabilities."
 this.todo = {
@@ -9,11 +9,6 @@ this.todo = {
 
 local utable = L:get("lcore.utility.table")
 local oop
-
---Check whether an item is an object or lcore module name
-local resolve = function(item)
-	return (type(item) == "table") and item or L:get(tostring(item))
-end
 
 oop = {
 	objectify = function(self, target)
@@ -39,10 +34,6 @@ oop = {
 		local mixing = {}
 		local imixing = {}
 		local args = {...}
-
-		for key, value in pairs(args) do
-			args[key] = resolve(value)
-		end
 
 		for step, class in pairs(args) do
 			for key, value in pairs(class) do
@@ -90,7 +81,7 @@ oop = {
 	object = {
 		inherit = function(self, ...)
 			for key, item in ipairs({...}) do
-				utable:merge(resolve(item), self)
+				utable:merge(item, self)
 			end
 
 			return self
