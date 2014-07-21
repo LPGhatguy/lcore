@@ -1,6 +1,6 @@
 local L, this = ...
 this.title = "Table Extension Library"
-this.version = "1.0"
+this.version = "1.1"
 this.status = "production"
 this.desc = "Provides extensions for operating on tables."
 
@@ -8,6 +8,50 @@ local utable
 local test
 
 utable = {
+	is_dictionary = function(self, source)
+		for key in pairs(source) do
+			if (type(key) ~= "number") then
+				return true
+			end
+		end
+
+		return false
+	end,
+
+	is_sequence = function(self, source)
+		local last = 0
+
+		for key in ipairs(source) do
+			if (key ~= last + 1) then
+				return false
+			else
+				last = key
+			end
+		end
+
+		return (last ~= 0)
+	end,
+
+	array_data = function(self, target, ...)
+		for key, value in ipairs(target) do
+			target[key] = nil
+		end
+
+		for key, value in ipairs({...}) do
+			target[key] = value
+		end
+
+		return target
+	end,
+
+	array_update = function(self, target, ...)
+		for key, value in ipairs({...}) do
+			target[key] = value
+		end
+
+		return target
+	end,
+
 	equal = function(self, first, second, no_reverse)
 		for key, value in pairs(first) do
 			if (second[key] ~= value) then
