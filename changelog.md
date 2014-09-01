@@ -1,4 +1,27 @@
-# 0.9.0 (in development)
+# 1.0.0 (in development)
+- Updated PAAPI graphics, especially retained mode
+- Renamed lcore/core.lua to lcore/init.lua
+	- Use require("lcore") to load lcore now
+- Minor UI module tweaks
+
+## core (1.0.0)
+- Rename 'safe' parameter to flags (breaking change)
+- Directories can now be fully loaded by passing {fully_load=true} into flags
+- Safe calls have been moved into the 'safe' flag
+
+## utility.oop (2.0)
+- Restructure OOP along the lines of the in-development Coeus engine
+- _new no longer needs to return self
+- Constructors are now of the form (self, ...) instead of (base, self, ...)
+- Object instances are now userdata objects that act like pointers
+- utility.table no longer handles copylock management
+- Removed utility.table.copylock
+- Added table.wrap
+- Added oop.wrap, oop.static
+- Added object.add_metamethods, object.get_internal, object.point
+- Added static_object class for services that just require inheritance.
+
+# 0.9.0 (unreleased)
 - Removed platform.nspire, it was a stub
 - Removed graphics.theme, this will be replaced but was not useful.
 - Removed utility.math, it only had a non-functional expmod method.

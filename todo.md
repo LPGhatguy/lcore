@@ -10,6 +10,7 @@
 - Merge graphics.core into PAAPI
 - Provide subscissoring
 - Receieve generic event calls with special hook
+- Rewrite UI modules to take advantage of OOP 2.0 and grouped properties
 
 # Complete(ish) Features
 - Profiling (debug.stopwatch)
@@ -24,7 +25,6 @@
 - Content manager (service.content)
 - Versioning (utility.version)
 - Automatic update features (utility.update)
-- Module testing (core)
 
 # Work-in-Progress Features
 

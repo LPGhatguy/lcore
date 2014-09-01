@@ -65,6 +65,22 @@ local fs_isdir = function(path)
 	end
 end
 
+local fs_dir = function(path)
+	if (L.__internal_platform == "love") then
+		return love.filesystem.getDirectoryItems(path)
+	else
+		local paths = {}
+
+		for name in lfs.dir(path) do
+			if (name ~= "." and name ~= "..") then
+				table.insert(paths, name)
+			end
+		end
+
+		return paths
+	end
+end
+
 N = {
 	deprecated = function(method, name)
 		local output = "Function '"
@@ -150,6 +166,10 @@ L = {
 
 	module_to_dir_path = function(self, mod)
 		return mod:gsub("%.", "/"):gsub("~", "..")
+	end,
+
+	file_path_to_module = function(self, file)
+		return file:gsub("%.[^%.]*$", ""):gsub("/", "%.")
 	end,
 
 	method_name = function(self, method, name)
@@ -272,7 +292,9 @@ L = {
 		return self
 	end,
 
-	get = function(self, mod_name, safe, ...)
+	get = function(self, mod_name, flags, ...)
+		flags = flags or {}
+
 		if (self.loaded[mod_name]) then
 			return self.loaded[mod_name]
 		else
@@ -287,8 +309,8 @@ L = {
 			local path, root, attempts = self:get_path(mod_name)
 
 			if (path) then
-				return self:load(mod_name, path, ...)
-			elseif (not safe) then
+				return self:load(mod_name, path, flags, ...)
+			elseif (not flags.safe) then
 				return nil, self:error("Couldn't find module '" .. mod_name .. "'"
 					.. "\n\nPaths tried:\n" .. table.concat(attempts, "\n"))
 			end
@@ -327,8 +349,8 @@ L = {
 		return object, info
 	end,
 
-	load_directory = function(self, mod_name, path)
-		local container = {__lcore_directory = true}
+	load_directory = function(self, mod_name)
+		local container = {}
 
 		setmetatable(container, {
 			__index = function(container, key)
@@ -342,9 +364,27 @@ L = {
 		return container
 	end,
 
-	load = function(self, mod_name, path, ...)
+	fully_load_directory = function(self, mod_name, path)
+		path = path or self:module_to_dir_path(mod_name)
+		local dir = self:load_directory(mod_name)
+
+		for key, name in ipairs(fs_dir(path)) do
+			local mod = self:file_path_to_module(name)
+			dir[mod] = self:get(mod_name .. "." .. mod)
+		end
+
+		return dir
+	end,
+
+	load = function(self, mod_name, path, flags, ...)
+		flags = flags or {}
+
 		if (fs_isdir(path)) then
-			return self:load_directory(mod_name, path, ...)
+			if (flags.fully_load) then
+				return self:fully_load_directory(mod_name, path, ...)
+			else
+				return self:load_directory(mod_name, path, ...)
+			end
 		elseif (fs_isfile(path)) then
 			return self:load_file(mod_name, path, ...)
 		else
