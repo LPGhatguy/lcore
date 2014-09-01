@@ -93,7 +93,10 @@ oop = {
 
 		new = function(self, ...)
 			if (self._new) then
-				return self:_new(self:copy(), ...)
+				local instance = self:copy()
+				self:_new(instance, ...)
+
+				return instance
 			else
 				return self:copy()
 			end
