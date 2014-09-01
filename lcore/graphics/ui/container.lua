@@ -4,7 +4,6 @@ this.version = "1.1"
 this.status = "production"
 this.desc = "Holds other UI items and passes draw calls to them."
 this.todo = {
-	"Implement a bounding_box method"
 }
 
 local oop = L:get("lcore.utility.oop")

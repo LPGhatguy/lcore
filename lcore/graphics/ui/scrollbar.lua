@@ -35,7 +35,7 @@ scrollbar = oop:class(frame) {
 		end
 	end,
 
-	_new = function(base, self, manager, x, y, o, horizontal)
+	_new = function(self, manager, x, y, o, horizontal)
 		local w, h
 		if (horizontal) then
 			w, h = o, self.size
@@ -43,7 +43,7 @@ scrollbar = oop:class(frame) {
 			w, h = self.size, o
 		end
 
-		frame._new(base, self, manager, x, y, w, h)
+		frame._new(self, manager, x, y, w, h)
 
 		self.horizontal = horizontal
 

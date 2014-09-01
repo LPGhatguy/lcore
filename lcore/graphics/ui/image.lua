@@ -11,8 +11,8 @@ local image
 image = oop:class(rectangle) {
 	image = nil,
 
-	_new = function(base, self, manager, image, x, y, w, h)
-		self = rectangle._new(base, self, manager, x, y, w, h)
+	_new = function(self, manager, image, x, y, w, h)
+		self = rectangle._new(self, manager, x, y, w, h)
 		self.image = image
 
 		return self

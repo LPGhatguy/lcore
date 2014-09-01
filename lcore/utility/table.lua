@@ -1,6 +1,6 @@
 local L, this = ...
 this.title = "Table Extension Library"
-this.version = "1.1"
+this.version = "1.2"
 this.status = "production"
 this.desc = "Provides extensions for operating on tables."
 
@@ -92,10 +92,17 @@ utable = {
 		end
 	end,
 
-	copylock = function(self, target)
-		target.__nocopy = true
+	wrap = function(self, object, readonly)
+		local interface = newproxy(true)
+		local imeta = getmetatable(interface)
 
-		return target
+		imeta.__index = object
+
+		if (not readonly) then
+			imeta.__newindex = object
+		end
+
+		return interface
 	end,
 
 	copy = function(self, source, target)
@@ -108,16 +115,16 @@ utable = {
 		return target
 	end,
 
-	deepcopy = function(self, source, target, break_lock)
+	deepcopy = function(self, source, target)
 		target = target or {}
 
 		for key, value in pairs(source) do
-			if (type(value) == "table") then
-				if (value.__nocopy and not break_lock) then
-					target[key] = value
-				else
-					target[key] = utable:deepcopy(value)
-				end
+			local typeof = type(value)
+
+			if (typeof == "table") then
+				target[key] = utable:deepcopy(value)
+			elseif (typeof == "userdata" and value.copy) then
+				target[key] = value:copy()
 			else
 				target[key] = value
 			end
@@ -140,19 +147,41 @@ utable = {
 		return target
 	end,
 
-	copymerge = function(self, source, target, break_lock)
+	copymerge = function(self, source, target)
 		if (not target) then
 			return nil
 		end
 
 		for key, value in pairs(source) do
 			if (not target[key]) then
-				if (type(value) == "table") then
-					if (not value.__nocopy and not break_lock) then
-						target[key] = utable:copy(value)
-					else
-						target[key] = value
-					end
+				local typeof = type(value)
+
+				if (typeof == "table") then
+					target[key] = utable:copy(value)
+				elseif (typeof == "userdata" and value.copy) then
+					target[key] = value:copy()
+				else
+					target[key] = value
+				end
+			end
+		end
+
+		return target
+	end,
+
+	deepcopymerge = function(self, source, target)
+		if (not target) then
+			return nil
+		end
+
+		for key, value in pairs(source) do
+			if (not target[key]) then
+				local typeof = type(value)
+
+				if (typeof == "table") then
+					target[key] = self:deepcopy(value)
+				elseif (typeof == "userdata" and value.copy) then
+					target[key] = value:copy()
 				else
 					target[key] = value
 				end

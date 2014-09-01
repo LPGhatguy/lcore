@@ -67,8 +67,8 @@ color_picker = oop:class(event, frame) {
 
 	box_shader = nil,
 
-	_new = function(base, self, manager, x, y, w, h)
-		self = frame._new(base, self, manager, x, y, w, h)
+	_new = function(self, manager, x, y, w, h)
+		self = frame._new(self, manager, x, y, w, h)
 
 		self.box_shader = love.graphics.newShader(shader_source)
 		self.box_shader:sendInt("depth", self.depth)
@@ -126,7 +126,7 @@ color_picker = oop:class(event, frame) {
 		manager:hook({"draw", "mousepressed", "mousereleased", "update"}, self)
 	end,
 
-	_destroy = function(self)
+	destroy = function(self)
 		self:connect()
 	end,
 

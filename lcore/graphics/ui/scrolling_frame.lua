@@ -32,8 +32,8 @@ scrolling_frame = oop:class(frame) {
 		manager:hook({"mousepressed", "mousereleased", "update"}, self)
 	end,
 
-	_new = function(base, self, manager, x, y, w, h)
-		frame._new(base, self, manager, x, y, w, h)
+	_new = function(self, manager, x, y, w, h)
+		frame._new(self, manager, x, y, w, h)
 
 		self.child_manager = event:new()
 

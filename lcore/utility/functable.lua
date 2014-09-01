@@ -12,12 +12,10 @@ functable = oop:class() {
 	__functable = true,
 	methods = {},
 
-	_new = function(self, new, ...)
-		setmetatable(new, getmetatable(self))
+	_new = function(self, ...)
+		setmetatable(self, getmetatable(self))
 
-		new:append(...)
-
-		return new
+		self:append(...)
 	end,
 
 	call = function(self, ...)

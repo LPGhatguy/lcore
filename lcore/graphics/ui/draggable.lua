@@ -28,7 +28,7 @@ draggable = oop:class() {
 		manager:hook({"mousepressed", "mousereleased", "update"}, self)
 	end,
 
-	_destroy = function(self)
+	destroy = function(self)
 		self.manager:unhook(self)
 	end,
 

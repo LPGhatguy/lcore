@@ -6,6 +6,7 @@ this.desc = "Lists named colors and provides color manipulation functions."
 
 local platform = L:get("lcore.platform.interface")
 local graphics = platform.graphics
+local utable = L:get("lcore.utility.table")
 local color
 
 color = {
@@ -148,8 +149,7 @@ color.hsv = color.hsv_to_rgb
 color.hsl = color.hsl_to_rgb
 
 for index, color in pairs(color.colors) do
-	color.__nocopy = true
-	color.__immutable = true
+	color[index] = utable:wrap(color, true)
 end
 
 return color

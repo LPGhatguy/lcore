@@ -23,7 +23,7 @@ event = oop:class() {
 	registered = {},
 	events = {},
 
-	_destroy = function(self)
+	destroy = function(self)
 		self.events = {}
 		self.registered = {}
 	end,
@@ -122,7 +122,7 @@ event = oop:class() {
 			for index = 1, #event do
 				local object = event[index][1]
 
-				if (type(object) == "table") then
+				if (type(object) == "table" or type(object) == "userdata") then
 					if (object[event_name]) then
 						object[event_name](object, ...)
 					elseif (object.fire) then

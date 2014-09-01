@@ -12,11 +12,11 @@ rectangle_shape = oop:class(element) {
 	w = 0,
 	h = 0,
 
-	_new = function(base, self, manager, x, y, w, h)
-		element._new(base, self, manager, x, y)
+	_new = function(self, manager, x, y, w, h)
+		element._new(self, manager, x, y)
 		
-		self.w = w or base.w
-		self.h = h or base.h
+		self.w = w or self.w
+		self.h = h or self.h
 
 		return self
 	end,

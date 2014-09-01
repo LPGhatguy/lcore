@@ -11,8 +11,8 @@ local circle_shape
 circle_shape = oop:class(element) {
 	r = 0,
 
-	_new = function(base, self, manager, x, y, r)
-		element._new(base, self, manager, x, y)
+	_new = function(self, manager, x, y, r)
+		element._new(self, manager, x, y)
 		self.r = r or self.r
 
 		return self

@@ -17,8 +17,8 @@ label = oop:class(element) {
 	w = 0,
 	h = 0,
 
-	_new = function(base, self, manager, text, x, y, h, align)
-		element._new(base, self, manager, x, y)
+	_new = function(self, manager, text, x, y, h, align)
+		element._new(self, manager, x, y)
 
 		self.font = font:get(h)
 		self.text = text or self.text
