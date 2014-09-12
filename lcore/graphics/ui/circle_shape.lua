@@ -4,8 +4,9 @@ this.version = "1.0"
 this.status = "production"
 this.desc = "Provides methods identifying this UI element as a circle. Does not provide rendering."
 
-local oop = L:get("lcore.utility.oop")
-local element = L:get("lcore.graphics.ui.element")
+local lcore = L.lcore
+local oop = lcore.utility.oop
+local element = lcore.graphics.ui.element
 local circle_shape
 
 circle_shape = oop:class(element) {

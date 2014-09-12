@@ -7,12 +7,13 @@ this.todo = {
 	"Reimplement with radio buttons for picking sliders"
 }
 
-local oop = L:get("lcore.utility.oop")
-local color = L:get("lcore.graphics.color")
-local frame = L:get("lcore.graphics.ui.frame")
-local rectangle = L:get("lcore.graphics.ui.rectangle")
-local image = L:get("lcore.graphics.ui.image")
-local event = L:get("lcore.service.event")
+local lcore = L.lcore
+local oop = lcore.utility.oop
+local color = lcore.graphics.color
+local frame = lcore.graphics.ui.frame
+local rectangle = lcore.graphics.ui.rectangle
+local image = lcore.graphics.ui.image
+local event = lcore.service.event
 local color_picker
 
 --used in both box_picker and line_picker sub-components

@@ -4,9 +4,10 @@ this.version = "1.1"
 this.status = "production"
 this.desc = "Lists named colors and provides color manipulation functions."
 
-local platform = L:get("lcore.platform.interface")
+local lcore = L.lcore
+local platform = lcore.platform.interface
 local graphics = platform.graphics
-local utable = L:get("lcore.utility.table")
+local utable = lcore.utility.table
 local color
 
 color = {

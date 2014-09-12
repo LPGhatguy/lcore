@@ -4,9 +4,10 @@ this.version = "1.0"
 this.status = "production"
 this.desc = "Provides functionality for handling text in a box."
 
-local oop = L:get("lcore.utility.oop")
-local rectangle = L:get("lcore.graphics.ui.rectangle")
-local font = L:get("lcore.graphics.font")
+local lcore = L.lcore
+local oop = lcore.utility.oop
+local rectangle = lcore.graphics.ui.rectangle
+local font = lcore.graphics.font
 local label
 
 label = oop:class(rectangle) {

@@ -4,8 +4,9 @@ this.version = "1.0"
 this.status = "prototype"
 this.desc = "Provides a lightweight mutable function type designed for method mixing"
 
-local oop = L:get("lcore.utility.oop")
-local utable = L:get("lcore.utility.table")
+local lcore = L.lcore
+local oop = lcore.utility.oop
+local utable = lcore.utility.table
 local functable
 
 functable = oop:class() {

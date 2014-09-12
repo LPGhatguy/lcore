@@ -10,7 +10,8 @@ if (not lfs_enabled) then
 	L:warn("LuaFileSystem not found; some filesystem calls may be affected.")
 end
 
-local ref_fs = L:get("lcore.platform.reference.filesystem")
+local lcore = L.lcore
+local ref_fs = lcore.platform.reference.filesystem
 local vanilla_fs
 
 vanilla_fs = ref_fs:derive {

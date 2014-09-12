@@ -4,7 +4,8 @@ this.version = "1.0.1"
 this.status = "production"
 this.desc = "Provides core graphics methods for global interaction between graphics components."
 
-local platform = L:get("lcore.platform.interface")
+local lcore = L.lcore
+local platform = lcore.platform.interface
 local graphics = platform.graphics
 local core
 

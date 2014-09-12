@@ -4,9 +4,10 @@ this.version = "1.1"
 this.status = "production"
 this.desc = "The root element of all UI elements in LCORE"
 
-local oop = L:get("lcore.utility.oop")
-local gcore = L:get("lcore.graphics.core")
-local event = L:get("lcore.service.event")
+local lcore = L.lcore
+local oop = lcore.utility.oop
+local gcore = lcore.graphics.core
+local event = lcore.service.event
 local element
 
 element = oop:class() {

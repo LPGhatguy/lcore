@@ -4,7 +4,8 @@ this.version = "1.2"
 this.status = "production"
 this.desc = "Provides event support with both manager instantiation and global events."
 
-local oop = L:get("lcore.utility.oop")
+local lcore = L.lcore
+local oop = lcore.utility.oop
 local event
 
 local function event_sort(first, second)

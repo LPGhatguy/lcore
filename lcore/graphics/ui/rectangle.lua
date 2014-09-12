@@ -4,9 +4,10 @@ this.version = "1.0"
 this.status = "production"
 this.desc = "A rectangle with a border."
 
-local oop = L:get("lcore.utility.oop")
-local rectangle_shape = L:get("lcore.graphics.ui.rectangle_shape")
-local color = L:get("lcore.graphics.color")
+local lcore = L.lcore
+local oop = lcore.utility.oop
+local rectangle_shape = lcore.graphics.ui.rectangle_shape
+local color = lcore.graphics.color
 local rectangle
 
 rectangle = oop:class(rectangle_shape) {

@@ -4,7 +4,8 @@ this.version = "0.1"
 this.status = "prototype"
 this.desc = "A no-op module providing a reference API"
 
-local utable = L:get("lcore.utility.table")
+local lcore = L.lcore
+local utable = lcore.utility.table
 local ref_fs
 
 local fs_nop = function(name, ...)

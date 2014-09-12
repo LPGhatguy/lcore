@@ -4,8 +4,9 @@ this.version = "1.0"
 this.status = "production"
 this.desc = "Provides facilities identifying a UI element as a rectangle. Does not provide rendering."
 
-local oop = L:get("lcore.utility.oop")
-local element = L:get("lcore.graphics.ui.element")
+local lcore = L.lcore
+local oop = lcore.utility.oop
+local element = lcore.graphics.ui.element
 local rectangle_shape
 
 rectangle_shape = oop:class(element) {

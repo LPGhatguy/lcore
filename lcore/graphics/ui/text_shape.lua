@@ -4,9 +4,10 @@ this.version = "1.0"
 this.status = "production"
 this.desc = "Provides functionality for handling text."
 
-local oop = L:get("lcore.utility.oop")
-local element = L:get("lcore.graphics.ui.element")
-local font = L:get("lcore.graphics.font")
+local lcore = L.lcore
+local oop = lcore.utility.oop
+local element = lcore.graphics.ui.element
+local font = lcore.graphics.font
 local label
 
 label = oop:class(element) {

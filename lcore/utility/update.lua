@@ -9,7 +9,8 @@ this.todo = {
 
 local http = require("socket.http")
 local ltn12 = require("ltn12")
-local version = L:get("lcore.utility.version")
+local lcore = L.lcore
+local version = lcore.utility.version
 local update
 
 update = {

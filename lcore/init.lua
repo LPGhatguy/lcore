@@ -6,7 +6,6 @@ local this = {
 	desc = "Provides the basis for lcore and all its modules.",
 
 	todo = {
-		"Allow deprecation and tracing of tables and other properties.",
 		"Improve method_name's inference.",
 		"Look into fixing loop complexify of L:get"
 	}
@@ -20,7 +19,6 @@ end
 local root = (...):match("(.+)%..-$")
 
 local L
-local N
 
 local fs_load = function(path)
 	if (L.__internal_platform == "love") then
@@ -81,56 +79,10 @@ local fs_dir = function(path)
 	end
 end
 
-N = {
-	deprecated = function(method, name)
-		local output = "Function '"
-			.. (name or L:method_name(method, name))
-			.. "' is deprecated."
-
-		return function(...)
-			L:report("deprecation", output)
-			return method(...)
-		end
-	end,
-
-	traced = function(method, name)
-		local output = "Function '"
-		.. (name or L:method_name(method, name))
-		.. "' was called!"
-
-		return function(...)
-			L:report("trace", output)
-			return method(...)
-		end
-	end,
-
-	hooked = function(target, method)
-		return function(...)
-			method(...)
-			return target(...)
-		end
-	end,
-
-	compose = function(target, method)
-		return function(...)
-			return target(method(...))
-		end
-	end,
-
-	compose_method = function(target, method)
-		return function(self, ...)
-			return target(self, method(self, ...))
-		end
-	end
-}
-
 L = {
 	__internal_platform = love and "love" or "vanilla",
 
-	N = N,
 	info = this,
-
-	version = this.version,
 
 	report_level = {
 		default = "warn",
@@ -325,6 +277,7 @@ L = {
 		end
 
 		local info = {
+			leaf = mod_name and mod_name:match("[^%.]+$"),
 			name = mod_name,
 			path = path
 		}
@@ -335,13 +288,15 @@ L = {
 			return nil, self:error((mod_name or "unknown module") .. " error: " .. object)
 		end
 
-		if (object) then
-			if (mod_name) then
+		if (mod_name) then
+			self.metadata[mod_name] = info
+
+			if (object) then
 				self.loaded[mod_name] = object
-				self.metadata[mod_name] = info
+				self.metadata[object] = info
 
 				if (self.autotest and info.test_module) then
-					self:get(info.test_module)
+					self:get(info.test_module, nil, object)
 				end
 			end
 		end
@@ -392,5 +347,7 @@ L = {
 		end
 	end
 }
+
+L.lcore = L:get("lcore")
 
 return L

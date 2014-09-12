@@ -4,13 +4,14 @@ this.version = "1.0"
 this.status = "development"
 this.desc = "Provides a scrolling bar"
 
-local oop = L:get("lcore.utility.oop")
-local rectangle = L:get("lcore.graphics.ui.rectangle")
-local frame = L:get("lcore.graphics.ui.frame")
-local draggable = L:get("lcore.graphics.ui.draggable")
-local rect_button = oop:mix(rectangle, "lcore.graphics.ui.button")
-local rect_drag = oop:mix(rectangle, "lcore.graphics.ui.draggable")
-local platform = L:get("lcore.platform.interface")
+local lcore = L.lcore
+local oop = lcore.utility.oop
+local rectangle = lcore.graphics.ui.rectangle
+local frame = lcore.graphics.ui.frame
+local draggable = lcore.graphics.ui.draggable
+local rect_button = oop:mix(rectangle, lcore.graphics.ui.button)
+local rect_drag = oop:mix(rectangle, lcore.graphics.ui.draggable)
+local platform = lcore.platform.interface
 local graphics = platform.graphics
 local scrollbar
 

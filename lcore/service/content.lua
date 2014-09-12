@@ -10,7 +10,8 @@ this.todo = {
 	"Test for successful platform use from platform.filesystem."
 }
 
-local platform = L:get("lcore.platform.interface")
+local lcore = L.lcore
+local platform = lcore.platform.interface
 local fs = platform.filesystem
 local content
 local load_assoc_meta

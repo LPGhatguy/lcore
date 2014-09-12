@@ -4,9 +4,10 @@ this.version = "0.1"
 this.status = "prototype"
 this.desc = "A module providing a reference API"
 
+local lcore = L.lcore
+local utable = lcore.utility.table
+local event = lcore.service.event
 local ref_core
-local utable = L:get("lcore.utility.table")
-local event = L:get("lcore.service.event")
 
 ref_core = {
 	derive = function(self, target)

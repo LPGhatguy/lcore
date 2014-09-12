@@ -4,8 +4,9 @@ this.version = "1.0"
 this.status = "production"
 this.desc = "Draws an image with an optional background and border."
 
-local oop = L:get("lcore.utility.oop")
-local rectangle = L:get("lcore.graphics.ui.rectangle")
+local lcore = L.lcore
+local oop = lcore.utility.oop
+local rectangle = lcore.graphics.ui.rectangle
 local image
 
 image = oop:class(rectangle) {

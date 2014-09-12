@@ -4,8 +4,10 @@ this.status = "production"
 this.version = "1.0"
 this.desc = "Provides button functionality and event hooking for any UI element."
 
-local oop = L:get("lcore.utility.oop")
-local event = L:get("lcore.service.event")
+local lcore = L.lcore
+local oop = lcore.utility.oop
+local event = lcore.service.event
+local element = lcore.graphics.ui.element
 local button
 
 button = oop:class(element) {

@@ -6,10 +6,11 @@ this.desc = "Holds other UI items and passes draw calls to them."
 this.todo = {
 }
 
-local oop = L:get("lcore.utility.oop")
-local event = L:get("lcore.service.event")
-local element = L:get("lcore.graphics.ui.element")
-local gcore = L:get("lcore.graphics.core")
+local lcore = L.lcore
+local oop = lcore.utility.oop
+local event = lcore.service.event
+local element = lcore.graphics.ui.element
+local gcore = lcore.graphics.core
 local container
 
 local child_sorter = function(first, second)

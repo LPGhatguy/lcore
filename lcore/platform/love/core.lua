@@ -12,10 +12,11 @@ if (not love) then
 	return
 end
 
-local modules = L:get("lcore.platform.love")
-local event = L:get("lcore.service.event")
-local ref_core = L:get("lcore.platform.reference.core")
-local love_gfx = L:get("lcore.platform.love.graphics")
+local lcore = L.lcore
+local modules = lcore.platform.love
+local event = lcore.service.event
+local ref_core = lcore.platform.reference.core
+local love_gfx = lcore.platform.love.graphics
 local love_core
 
 love_core = ref_core:derive {

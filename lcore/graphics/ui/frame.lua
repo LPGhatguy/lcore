@@ -4,10 +4,11 @@ this.version = "1.1"
 this.status = "production"
 this.desc = "Contains other UI elements and draws a rectangle behind them."
 
-local oop = L:get("lcore.utility.oop")
-local rectangle = L:get("lcore.graphics.ui.rectangle")
-local container = L:get("lcore.graphics.ui.container")
-local platform = L:get("lcore.platform.interface")
+local lcore = L.lcore
+local oop = lcore.utility.oop
+local rectangle = lcore.graphics.ui.rectangle
+local container = lcore.graphics.ui.container
+local platform = lcore.platform.interface
 local graphics = platform.graphics
 local frame
 

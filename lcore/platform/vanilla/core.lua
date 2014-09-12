@@ -4,7 +4,8 @@ this.version = "1.0"
 this.status = "production"
 this.desc = "Provides useful interfaces for using lcore with vanilla Lua."
 
-local ref_core = L:get("lcore.platform.reference.core")
+local lcore = L.lcore
+local ref_core = lcore.platform.reference.core
 local vanilla_core
 
 vanilla_core = ref_core:derive {

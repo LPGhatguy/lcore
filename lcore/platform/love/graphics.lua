@@ -9,7 +9,8 @@ if (not love.graphics) then
 end
 
 local lg = love.graphics
-local ref_gfx = L:get("lcore.platform.reference.graphics")
+local lcore = L.lcore
+local ref_gfx = lcore.platform.reference.graphics
 local love_gfx
 
 love_gfx = ref_gfx:derive {

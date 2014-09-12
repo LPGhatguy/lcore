@@ -7,7 +7,8 @@ this.todo = {
 	"Fix version comparison method."
 }
 
-local platform = L:get("lcore.platform.interface")
+local lcore = L.lcore
+local platform = lcore.platform.interface
 local fs = platform.filesystem
 local version
 

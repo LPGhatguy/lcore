@@ -4,9 +4,10 @@ this.version = "1.0"
 this.status = "production"
 this.desc = "A UI circle element with a border."
 
-local oop = L:get("lcore.utility.oop")
-local color = L:get("lcore.graphics.color")
-local circle_shape = L:get("lcore.graphics.ui.circle_shape")
+local lcore = L.lcore
+local oop = lcore.utility.oop
+local color = lcore.graphics.color
+local circle_shape = lcore.graphics.ui.circle_shape
 local circle
 
 circle = oop:class(circle_shape) {

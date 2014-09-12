@@ -8,7 +8,8 @@ if (not love.filesystem) then
 	L:error("LOVE filesystem API not found for using LOVE filesystem platform.")
 end
 
-local ref_fs = L:get("lcore.platform.reference.filesystem")
+local lcore = L.lcore
+local ref_fs = lcore.platform.reference.filesystem
 local love_fs
 
 love_fs = ref_fs:derive {

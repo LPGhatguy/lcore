@@ -1,10 +1,11 @@
 local L, this = ...
 this.title = "Object Orientation Provider"
-this.version = "2.0"
+this.version = "2.0.1"
 this.status = "production"
 this.desc = "Provides advanced object orientation capabilities."
 
-local utable = L:get("lcore.utility.table")
+local lcore = L.lcore
+local utable = lcore.utility.table
 local oop
 
 oop = {
@@ -20,9 +21,13 @@ oop = {
 
 		return function(target)
 			if (target) then
+				new.is:get_internal()[target] = true
 				utable:merge(new, target)
+
 				return target
 			else
+				new.is:get_internal()[new] = true
+
 				return new
 			end
 		end
@@ -52,14 +57,19 @@ oop = {
 
 		imeta.__index = object
 		imeta.__newindex = object
+		imeta.__len = function(self)
+			return #object
+		end
 		imeta.__gc = function(self)
 			if (self.destroy) then
 				self:destroy()
 			end
 		end
 
-		for key, value in pairs(object.__metatable) do
-			imeta[key] = value
+		if (object.__metatable) then
+			for key, value in pairs(object.__metatable) do
+				imeta[key] = value
+			end
 		end
 
 		return interface
@@ -88,6 +98,8 @@ oop = {
 				elseif (not result[key]) then
 					if (typed == "table") then
 						result[key] = utable:deepcopy(value)
+					elseif (typed == "userdata" and value.copy) then
+						result[key] = value:copy()
 					else
 						result[key] = value
 					end
@@ -119,14 +131,24 @@ oop = {
 
 		--Class Methods
 		inherit = function(self, ...)
+			local is = utable:copy(self.is:get_internal())
+
 			for key, item in ipairs({...}) do
 				utable:deepcopymerge(item, self)
+
+				if (item.is) then
+					for key, value in pairs(item.is:get_internal()) do
+						is[key] = value
+					end
+				end
 
 				local imeta = item.__metatable or getmetatable(item)
 				if (imeta) then
 					utable:merge(imeta, self.__metatable)
 				end
 			end
+
+			self.is = oop:wrap(is)
 
 			return self
 		end,
@@ -167,5 +189,8 @@ oop = {
 		end
 	}
 }
+
+oop.object.is = oop:wrap({[oop.object] = true})
+oop.static_object.is = oop:wrap({[oop.static_object] = true})
 
 return oop

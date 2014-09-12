@@ -71,15 +71,13 @@ ref_gfx = {
 			line_width = 2,
 			__gfx = nil,
 
-			_new = function(base, self, x, y, w, h)
+			_new = function(self, x, y, w, h)
 				self.__gfx = platform.graphics
 
-				self.x = x or base.x
-				self.y = y or base.y
-				self.w = w or base.w
-				self.h = h or base.h
-
-				return self
+				self.x = x or self.x
+				self.y = y or self.y
+				self.w = w or self.w
+				self.h = h or self.h
 			end,
 
 			hook = function(self, handler)
@@ -89,6 +87,33 @@ ref_gfx = {
 			draw = function(self)
 				self.__gfx.set_color_rgba(self.color)
 				self.__gfx.rectangle(self.fill and "fill" or "line", self.x, self.y, self.w, self.h)
+			end
+		},
+
+		circle = oop:class() {
+			x = 0,
+			y = 0,
+			r = 0,
+			color = {255, 255, 255, 255},
+			fill = true,
+			line_width = 2,
+			__gfx = nil,
+
+			_new = function(self, x, y, r)
+				self.__gfx = platform.graphics
+
+				self.x = x or self.x
+				self.y = y or self.y
+				self.r = r or self.r
+			end,
+
+			hook = function(self, handler)
+				handler:hook("draw", self)
+			end,
+
+			draw = function(self)
+				self.__gfx.set_color_rgba(self.color)
+				self.__gfx.circle(self.fill and "fill" or "line", self.x, self.y, self.r)
 			end
 		}
 	}

@@ -4,8 +4,9 @@ this.version = "1.1"
 this.status = "production"
 this.desc = "Enables draggable functionality in other UI elements."
 
-local oop = L:get("lcore.utility.oop")
-local event = L:get("lcore.service.event")
+local lcore = L.lcore
+local oop = lcore.utility.oop
+local event = lcore.service.event
 local draggable
 
 draggable = oop:class() {

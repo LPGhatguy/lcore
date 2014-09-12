@@ -4,10 +4,11 @@ this.version = "2.0"
 this.status = "production"
 this.desc = "Draws text."
 
-local oop = L:get("lcore.utility.oop")
-local color = L:get("lcore.graphics.color")
-local font = L:get("lcore.graphics.font")
-local text_shape = L:get("lcore.graphics.ui.text_shape")
+local lcore = L.lcore
+local oop = lcore.utility.oop
+local color = lcore.graphics.color
+local font = lcore.graphics.font
+local text_shape = lcore.graphics.ui.text_shape
 local label
 
 label = oop:class(text_shape) {

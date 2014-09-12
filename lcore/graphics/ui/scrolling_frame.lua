@@ -4,14 +4,15 @@ this.version = "1.0"
 this.status = "production"
 this.desc = "Contains other UI elements, draws a background, and scrolls!"
 
-local oop = L:get("lcore.utility.oop")
-local event = L:get("lcore.service.event")
-local gcore = L:get("lcore.graphics.core")
-local rectangle = L:get("lcore.graphics.ui.rectangle")
-local container = L:get("lcore.graphics.ui.container")
-local frame = L:get("lcore.graphics.ui.frame")
-local scrollbar = L:get("lcore.graphics.ui.scrollbar")
-local platform = L:get("lcore.platform.interface")
+local lcore = L.lcore
+local oop = lcore.utility.oop
+local event = lcore.service.event
+local gcore = lcore.graphics.core
+local rectangle = lcore.graphics.ui.rectangle
+local container = lcore.graphics.ui.container
+local frame = lcore.graphics.ui.frame
+local scrollbar = lcore.graphics.ui.scrollbar
+local platform = lcore.platform.interface
 local graphics = platform.graphics
 local scrolling_frame
 
