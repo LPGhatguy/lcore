@@ -1,12 +1,16 @@
 local L, this = ...
 this.title = "PAAPI Reference Graphics Implementation"
-this.version = "0.1"
+this.version = "0.2"
 this.status = "prototype"
 this.desc = "A no-op module providing a reference API"
 
-local utable = L:get("lcore.utility.table")
-local platform = L:get("lcore.platform.interface")
-local oop = L:get("lcore.utility.oop")
+local lcore = L.lcore
+local utable = lcore.utility.table
+local platform = lcore.platform.interface
+local utable = lcore.utility.table
+local oop = lcore.utility.oop
+local vector2 = lcore.utility.vector2
+local color4 = lcore.utility.color4
 local ref_gfx
 
 local gfx_nop = function(name, ...)
@@ -50,23 +54,31 @@ ref_gfx = {
 	project = gfx_nop("project"),
 	unproject = gfx_nop("unproject"),
 
-	set_color_rgba = gfx_nop("set_color_rgba"),
-	get_color_rgba = gfx_nop("get_color_rgba"),
-	set_color = gfx_nop("set_color"),
-	get_color = gfx_nop("get_color"),
+	set_line_width = gfx_nop("set_line_width"),
+	get_line_width = gfx_nop("get_line_width", 1),
 
-	set_background_color_rgb = gfx_nop("set_background_color_rgb"),
-	get_background_color_rgb = gfx_nop("get_background_color_rgb", 0, 0, 0, 0),
-	set_background_color = gfx_nop("set_background_color"),
-	get_background_color = gfx_nop("get_background_color", 0, 0, 0, 0),
+	set_point_size = gfx_nop("set_point_size"),
+	get_point_size = gfx_nop("get_point_size"),
+
+	set_color_rgba = gfx_nop("set_color_rgba"),
+	get_color_rgba = gfx_nop("get_color_rgba", 0, 0, 0, 0),
+	set_color_c4 = gfx_nop("set_color_c4"),
+	get_color_c4 = gfx_nop("get_color_c4", color4:new(255, 255, 255, 255)),
+
+	--void set_background_color_rgba(uchar r, uchar g, uchar b, uchar a)
+	set_background_color_rgba = gfx_nop("set_background_color_rgba"),
+	--(uchar r, uchar g, uchar b, uchar a) get_background_color_rgba()
+	get_background_color_rgba = gfx_nop("get_background_color_rgba", 0, 0, 0, 0),
+	--void set_background_color_c4(color4 color)
+	set_background_color_c4 = gfx_nop("set_background_color_c4"),
+	--(color4 color) get_background_color_c4()
+	get_background_color_c4 = gfx_nop("get_background_color_c4", color4:new(0, 0, 0, 0)),
 
 	retained = {
 		rectangle = oop:class() {
-			x = 0,
-			y = 0,
-			w = 0,
-			h = 0,
-			color = {255, 255, 255, 255},
+			position = nil,
+			size = nil,
+			color = nil,
 			fill = true,
 			line_width = 2,
 			__gfx = nil,
@@ -74,10 +86,9 @@ ref_gfx = {
 			_new = function(self, x, y, w, h)
 				self.__gfx = platform.graphics
 
-				self.x = x or self.x
-				self.y = y or self.y
-				self.w = w or self.w
-				self.h = h or self.h
+				self.position = vector2:new(x or 0, y or 0)
+				self.size = vector2:new(w or 0, h or 0)
+				self.color = color4:new(255, 255, 255, 255)
 			end,
 
 			hook = function(self, handler)
@@ -85,16 +96,16 @@ ref_gfx = {
 			end,
 
 			draw = function(self)
-				self.__gfx.set_color_rgba(self.color)
-				self.__gfx.rectangle(self.fill and "fill" or "line", self.x, self.y, self.w, self.h)
+				self.__gfx.set_color_c4(self.color)
+				self.__gfx.set_line_width(self.line_width)
+				self.__gfx.rectangle(self.fill and "fill" or "line", self.position.x, self.position.y, self.size.x, self.size.y)
 			end
 		},
 
 		circle = oop:class() {
-			x = 0,
-			y = 0,
+			position = nil,
 			r = 0,
-			color = {255, 255, 255, 255},
+			color = nil,
 			fill = true,
 			line_width = 2,
 			__gfx = nil,
@@ -102,9 +113,9 @@ ref_gfx = {
 			_new = function(self, x, y, r)
 				self.__gfx = platform.graphics
 
-				self.x = x or self.x
-				self.y = y or self.y
+				self.position = vector2:new(x or 0, y or 0)
 				self.r = r or self.r
+				self.color = color4:new(255, 255, 255, 255)
 			end,
 
 			hook = function(self, handler)
@@ -112,8 +123,44 @@ ref_gfx = {
 			end,
 
 			draw = function(self)
-				self.__gfx.set_color_rgba(self.color)
-				self.__gfx.circle(self.fill and "fill" or "line", self.x, self.y, self.r)
+				self.__gfx.set_color_c4(self.color)
+				self.__gfx.set_line_width(self.line_width)
+				self.__gfx.circle(self.fill and "fill" or "line", self.position.x, self.position.y, self.r)
+			end
+		},
+
+		polygon = oop:class() {
+			points = {},
+			color = nil,
+			fill = true,
+			line_width = 2,
+			__gfx = nil,
+
+			_new = function(self, ...)
+				self.__gfx = platform.graphics
+
+				local points = {...}
+
+				if (points % 2 ~= 0) then
+					return false, "polygon requires an even length list of points!"
+				end
+
+				if (points < 3) then
+					return false, "polygon requires at least three points!"
+				end
+
+				self.points = utable:copy(points)
+				self.color = color4:new(255, 255, 255, 255)
+			end,
+
+			hook = function(self, handler)
+				handler:hook("draw", self)
+			end,
+
+			draw = function(self)
+				self.__gfx.set_color_c4(self.color)
+				self.__gfx.set_line_width(self.line_width)
+				self.__gfx.polygon(self.fill and "fill" or "line", self.points)
 			end
 		}
 	}

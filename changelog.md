@@ -3,23 +3,42 @@
 - Renamed lcore/core.lua to lcore/init.lua
 	- Use require("lcore") to load lcore now
 - Minor UI module tweaks
+- Added 'meta' module for engine/project metadata specification
+- The 'headers' folder now contains metadata about the engine itself
+	- This folder replicates the structure of the main lcore folder, just containing headers instead.
+- Added utility.range object for specifying numeric ranges
+- Added utility.compound_range for compounding numeric ranges
+- Added utility.primitive_pointer for encasing primitive types in a userdata
+- Added utility.weak_pointer for encasing items in a userdata without affecting their garbage collection
+- Added utility.vector3 for 3D vector math
+- Moved tests folder into lcore.tests for unification purposes
 
 ## core (1.0.0)
 - Rename 'safe' parameter to flags (breaking change)
 - Directories can now be fully loaded by passing {fully_load=true} into flags
 - Safe calls have been moved into the 'safe' flag
 
+## utility.table
+- utility.table no longer handles copylock management
+- Userdata objects are now copied if they have a method called 'copy'
+
 ## utility.oop (2.0)
 - Restructure OOP along the lines of the in-development Coeus engine
 - _new no longer needs to return self
 - Constructors are now of the form (self, ...) instead of (base, self, ...)
 - Object instances are now userdata objects that act like pointers
-- utility.table no longer handles copylock management
 - Removed utility.table.copylock
 - Added table.wrap
 - Added oop.wrap, oop.static
 - Added object.add_metamethods, object.get_internal, object.point
 - Added static_object class for services that just require inheritance.
+
+## graphics platform (0.2)
+- Added scissor and get_scissor
+- Added set_line_width and get_line_width
+- Added set_point_size and get_point_size
+- Added set_color_c4 and get_color_c4, using color objects
+- Removed set_color and get_color, use set_color_rgba and get_color_rgba instead
 
 # 0.9.0 (unreleased)
 - Removed platform.nspire, it was a stub

@@ -11,6 +11,8 @@
 - Provide subscissoring
 - Receieve generic event calls with special hook
 - Rewrite UI modules to take advantage of OOP 2.0 and grouped properties
+- Allow modules to specify a debug_patch module to provide some sort of special debug functionality
+- Consider Lua frontend with preprocessing support
 
 # Complete(ish) Features
 - Profiling (debug.stopwatch)

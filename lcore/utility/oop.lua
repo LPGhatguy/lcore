@@ -1,6 +1,6 @@
 local L, this = ...
 this.title = "Object Orientation Provider"
-this.version = "2.0.1"
+this.version = "2.1.0"
 this.status = "production"
 this.desc = "Provides advanced object orientation capabilities."
 
@@ -134,7 +134,7 @@ oop = {
 			local is = utable:copy(self.is:get_internal())
 
 			for key, item in ipairs({...}) do
-				utable:deepcopymerge(item, self)
+				utable:deepcopymerge(item, self)				
 
 				if (item.is) then
 					for key, value in pairs(item.is:get_internal()) do
@@ -186,6 +186,21 @@ oop = {
 
 	static_object = {
 		inherit = function(self, ...)
+			local is = utable:copy(self.is:get_internal())
+
+			for key, item in ipairs({...}) do
+				utable:deepcopymerge(item, self)
+
+				if (item.is) then
+					for key, value in pairs(item.is:get_internal()) do
+						is[key] = value
+					end
+				end
+			end
+
+			self.is = oop:wrap(is)
+
+			return self
 		end
 	}
 }

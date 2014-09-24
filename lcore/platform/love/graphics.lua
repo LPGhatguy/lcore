@@ -11,6 +11,7 @@ end
 local lg = love.graphics
 local lcore = L.lcore
 local ref_gfx = lcore.platform.reference.graphics
+local color4 = lcore.utility.color4
 local love_gfx
 
 love_gfx = ref_gfx:derive {
@@ -68,6 +69,8 @@ love_gfx = ref_gfx:derive {
 		lg.shear(x, y)
 		table.insert(love_gfx.__transforms, {"shear", x, y})
 	end,
+	scissor = lg.setScissor,
+	get_scissor = lg.getScissor,
 
 	project = function(x, y)
 		local r = 0
@@ -92,18 +95,41 @@ love_gfx = ref_gfx:derive {
 		end
 	end,
 
-	scissor = lg.setScissor,
-	get_scissor = lg.getScissor,
+	--todo: unproject
+
+	set_line_width = lg.setLineWidth,
+	get_line_width = lg.getLineWidth,
+
+	set_point_size = lg.setPointSize,
+	get_point_size = lg.getPointSize,
 
 	set_color_rgba = lg.setColor,
 	get_color_rgba = lg.getColor,
-	set_color = lg.setColor,
-	get_color = lg.getColor,
+	set_color_c4 = function(color)
+		love.graphics.setColor(color.r, color.g, color.b, color.a)
+	end,
+	get_color_c4 = function(out)
+		if (out) then
+			out.r, out.g, out.b, out.a = love.graphics.getColor()
+			return out
+		else
+			return color4:new(love.graphics.getColor())
+		end
+	end,
 
-	set_background_color_rgb = lg.setBackgroundColor,
-	get_background_color_rgb = lg.getBackgroundColor,
-	set_background_color = lg.setBackgroundColor,
-	get_background_color = lg.getBackgroundColor
+	set_background_color_rgba = lg.setBackgroundColor,
+	get_background_color_rgba = lg.getBackgroundColor,
+	set_background_color_c4 = function(color)
+		love.graphics.setColor(color.r, color.g, color.b, color.a)
+	end,
+	get_background_color_c4 = function(out)
+		if (out) then
+			out.r, out.g, out.b, out.a = love.graphics.getBackgroundColor()
+			return out
+		else
+			return color4:new(love.graphics.getBackgroundColor())
+		end
+	end
 }
 
 return love_gfx
